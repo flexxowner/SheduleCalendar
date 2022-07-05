@@ -6,12 +6,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local ="using:SheduleCalendar"
     xmlns:local1 ="using:SheduleCalendar.ViewModels"
+    xmlns:muxc ="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Color x:Key="AppMidColor">#737272</Color>
         <SolidColorBrush x:Key="AppMidBrush" Color="{StaticResource AppMidColor}"/>
         <local1:MonthViewModel x:Key="DesignData"/>
+        <muxc:UniformGridLayout x:Key="UniformGridLayout2" MinItemWidth="108" MinItemHeight="108"
+                   MinRowSpacing="12" MinColumnSpacing="12"/>
         <Style x:Key="RowLine" TargetType="Border">
             <Setter Property="Grid.ColumnSpan" Value="7"/>
             <Setter Property="BorderBrush" Value="{StaticResource AppMidBrush}"/>
@@ -29,6 +32,7 @@
             <Setter Property="Foreground" Value="{StaticResource AppMidBrush}"/>
         </Style>
     </UserControl.Resources>
+    
     <Grid x:Name="ContentArea" Margin="24,10,24,0" d:DataContext="{StaticResource DesignData}">
 
         <Grid
@@ -37,6 +41,20 @@
                 <RowDefinition Height="0.1*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
+            <Grid Grid.Row="2">
+                <ScrollViewer x:Name="scrollViewer"
+                Height="400"
+                IsVerticalScrollChainingEnabled="False"
+                Padding="0,0,16,0">
+                    <muxc:ItemsRepeater
+            ItemsSource="{x:Bind ViewModel.FirstDay}"
+            Layout="{StaticResource UniformGridLayout2}"
+            />
+                </ScrollViewer>
+
+            </Grid>
+            
             <Grid Grid.Row="0" DataContext="{Binding ElementName=CalendarHolder, Path=SelectedItem}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -55,74 +73,6 @@
                 <TextBlock Text="Friday" Grid.Column="4"  Style="{StaticResource DayOfWeeksyle}"/>
                 <TextBlock Text="Saturday" Grid.Column="5"  Style="{StaticResource DayOfWeeksyle}"/>
                 <TextBlock Text="Sunday" Grid.Column="6"  Style="{StaticResource DayOfWeeksyle}"/>
-            </Grid>
-            <local:GridAwareItemsControl ItemsSource="{x:Bind ViewModel.Days}">
-                <local:GridAwareItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </local:GridAwareItemsControl.ItemsPanel>
-                <local:GridAwareItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentPresenter 
-                        Grid.Row="{Binding RowIndex}" 
-                        Grid.Column="{Binding ColumnIndex}"    
-                        Padding="0"
-                        BorderThickness="0"
-                        Background="Transparent"
-                        >
-                        </ContentPresenter>
-                    </DataTemplate>
-                </local:GridAwareItemsControl.ItemTemplate>
-            </local:GridAwareItemsControl>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Style="{StaticResource RowLine}"/>
-                <Border Grid.Row="1" Style="{StaticResource RowLine}"/>
-                <Border Grid.Row="2" Style="{StaticResource RowLine}"/>
-                <Border Grid.Row="3" Style="{StaticResource RowLine}"/>
-                <Border Grid.Row="4" Style="{StaticResource RowLine}"/>
-
-                <Border Grid.Column="0" Style="{StaticResource ColumnLine}"/>
-                <Border Grid.Column="1" Style="{StaticResource ColumnLine}"/>
-                <Border Grid.Column="2" Style="{StaticResource ColumnLine}"/>
-                <Border Grid.Column="3" Style="{StaticResource ColumnLine}"/>
-                <Border Grid.Column="4" Style="{StaticResource ColumnLine}"/>
-                <Border Grid.Column="5" Style="{StaticResource ColumnLine}"/>
             </Grid>
         </Grid>
     </Grid>
