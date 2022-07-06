@@ -1,0 +1,71 @@
+﻿<Page
+    x:Class="SheduleCalendar.Views.MonthPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc ="using:Microsoft.UI.Xaml.Controls"
+    xmlns:local ="using:SheduleCalendar.ViewModels"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Color x:Key="AppMidColor">#737272</Color>
+        <SolidColorBrush x:Key="AppMidBrush" Color="{StaticResource AppMidColor}"/>
+        <Style x:Key="RowLine" TargetType="Border">
+            <Setter Property="Grid.ColumnSpan" Value="7"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AppMidBrush}"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        </Style>
+        <Style x:Key="ColumnLine" TargetType="Border">
+            <Setter Property="Grid.RowSpan" Value="6"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AppMidBrush}"/>
+            <Setter Property="BorderThickness" Value="0 0 1 0"/>
+        </Style>
+        <Style x:Key="DayOfWeeksyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource AppMidBrush}"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Name="ContentArea" Margin="24,10,24,0" d:DataContext="{StaticResource DesignData}">
+
+        <Grid
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="2">
+                <ScrollViewer x:Name="scrollViewer"
+                Height="400"
+                IsVerticalScrollChainingEnabled="False"
+                Padding="0,0,16,0">
+                    <muxc:ItemsRepeater/>
+                </ScrollViewer>
+
+            </Grid>
+
+            <Grid Grid.Row="0" DataContext="{Binding ElementName=CalendarHolder, Path=SelectedItem}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.ColumnSpan="7" BorderBrush="{StaticResource AppMidBrush}" BorderThickness="0 1 0 1"/>
+                <TextBlock Text="Monday" Grid.Column="0"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Tuesday " Grid.Column="1"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Wednesday" Grid.Column="2"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Thursday" Grid.Column="3"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Friday" Grid.Column="4"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Saturday" Grid.Column="5"  Style="{StaticResource DayOfWeeksyle}"/>
+                <TextBlock Text="Sunday" Grid.Column="6"  Style="{StaticResource DayOfWeeksyle}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
