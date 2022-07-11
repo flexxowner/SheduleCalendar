@@ -8,8 +8,6 @@ namespace SheduleCalendar.Model
 {
     public class CalendarMonth
     {
-        public List<Event> List { get; set; }
-
         public int Year { get; }
 
         public int Month { get; }
@@ -20,7 +18,6 @@ namespace SheduleCalendar.Model
         {
             Year = date.Year;
             Month = date.Month;
-            List = new List<Event>();
             Days = new List<CalendarDay>
             {
                 new CalendarDay(date)
