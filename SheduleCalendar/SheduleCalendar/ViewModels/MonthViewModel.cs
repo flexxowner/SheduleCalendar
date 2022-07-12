@@ -20,12 +20,6 @@ namespace SheduleCalendar.ViewModels
             get { return _events; }
         }
 
-        private readonly ObservableCollection<CalendarDay> _days;
-        public ObservableCollection<CalendarDay> Days
-        {
-            get { return _days; }
-        }
-
         public MonthViewModel()
         {
             _currentDate = DateTime.Now;
@@ -33,9 +27,9 @@ namespace SheduleCalendar.ViewModels
             CurrentYear = _currentDate.ToString("yyyy").ToUpperInvariant();
             this._month = new ObservableCollection<CalendarMonth>()
             {
-                new CalendarMonth(_currentDate)
+                new CalendarMonth() {Year = _currentDate.Year, Month = _currentDate.Month, Days = DateTime.DaysInMonth(_currentDate.Year,_currentDate.Month) }
             };
-            this._days = new ObservableCollection<CalendarDay>();
+
             CreateEvents();
         }
 

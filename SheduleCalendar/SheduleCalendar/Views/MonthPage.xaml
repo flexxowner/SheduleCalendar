@@ -49,9 +49,11 @@
 
                 <GridView ItemsSource="{x:Bind ViewModel.Month}">
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models:CalendarDay">
+                        <DataTemplate x:DataType="models:CalendarMonth">
                             <StackPanel>
-                               
+                                <RelativePanel Height="Auto" Width="Auto">
+                                    <TextBlock Text="{x:Bind MonthDay}"/>
+                                </RelativePanel>
                             </StackPanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>

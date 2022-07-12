@@ -8,20 +8,30 @@ namespace SheduleCalendar.Model
 {
     public class CalendarMonth
     {
-        public int Year { get; }
+        public int Year { get; set; }
 
-        public int Month { get; }
+        public int Month { get; set; }
 
-        public List<CalendarDay> Days { get; set; }
+        public int Days { get; set; }
 
-        public CalendarMonth(DateTime date)
+        private readonly List<int> _monthDays;
+        public List<int> MonthDays
         {
-            Year = date.Year;
-            Month = date.Month;
-            Days = new List<CalendarDay>
+            get { return _monthDays; }
+        }
+
+        public CalendarMonth()
+        {
+            this._monthDays = new List<int>();
+            AddDays();
+        }
+
+        private void AddDays()
+        {
+            for (int i = 0; i < Days; i++)
             {
-                new CalendarDay(date)
-            };
+                _monthDays.Add(i);
+            }
         }
     }
 }
