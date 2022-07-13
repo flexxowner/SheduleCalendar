@@ -19,18 +19,18 @@ namespace SheduleCalendar.ViewModels
         {
             get { return _events; }
         }
-
+        private readonly ObservableCollection<int> _days;
+        public ObservableCollection<int> Days { get { return _days; }  }
         public MonthViewModel()
         {
+            this._month = new ObservableCollection<CalendarMonth>();
+            this._days = new ObservableCollection<int>();
             _currentDate = DateTime.Now;
             CurrentMonth = _currentDate.ToString("MMMM").ToUpperInvariant();
             CurrentYear = _currentDate.ToString("yyyy").ToUpperInvariant();
-            this._month = new ObservableCollection<CalendarMonth>()
-            {
-                new CalendarMonth() {Year = _currentDate.Year, Month = _currentDate.Month, Days = DateTime.DaysInMonth(_currentDate.Year,_currentDate.Month) }
-            };
+            AddDays();
+            AddToMonthList();
 
-            CreateEvents();
         }
 
         private readonly DateTime _currentDate;
@@ -51,6 +51,21 @@ namespace SheduleCalendar.ViewModels
         private void CreateEvents()
         {
             //_events.Add(new Event());
+        }
+        private void AddDays()
+        {
+            for (int i = 0; i < DateTime.DaysInMonth(_currentDate.Year,_currentDate.Month); i++)
+            {
+                _days.Add(i);
+            }
+        }
+
+        private void AddToMonthList()
+        {
+            for (int i = 1; i < this._days.Count; i++)
+            {
+                _month.Add(new CalendarMonth() { Year = _currentDate.Year, Month = _currentDate.Month, Day = _days[i] });
+            }
         }
     }
 }

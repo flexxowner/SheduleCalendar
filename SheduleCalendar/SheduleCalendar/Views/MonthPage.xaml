@@ -40,19 +40,19 @@
         <Grid
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.05*"/>
-                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.08*"/>
+                <RowDefinition Height="0.08*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="2">
 
-                <GridView ItemsSource="{x:Bind ViewModel.Month}">
+                <GridView ItemsSource="{x:Bind ViewModel.Month}" Width="Auto">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models:CalendarMonth">
                             <StackPanel>
-                                <RelativePanel Height="Auto" Width="Auto">
-                                    <TextBlock Text="{x:Bind MonthDay}"/>
+                                <RelativePanel Height="130" Width="162,5">
+                                    <TextBlock Text="{x:Bind Day}"/>
                                 </RelativePanel>
                             </StackPanel>
                         </DataTemplate>
@@ -60,27 +60,28 @@
                 </GridView>
             </Grid>
             <Grid Grid.Row="0">
-                <TextBlock HorizontalAlignment="Left" Margin="97,0,0,0" TextWrapping="Wrap" Text="{x:Bind ViewModel.CurrentMonth}" VerticalAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Left" Margin="131,0,0,0" TextWrapping="Wrap" Text="{x:Bind ViewModel.CurrentYear}" VerticalAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Left" Margin="29,0,0,0" TextWrapping="Wrap" Text="{x:Bind ViewModel.CurrentMonth}" VerticalAlignment="Center" Width="55"/>
+                <TextBlock HorizontalAlignment="Left" Margin="104,0,0,0" TextWrapping="Wrap" Text="{x:Bind ViewModel.CurrentYear}" VerticalAlignment="Center" Width="46"/>
             </Grid>
             <Grid Grid.Row="1" Margin="0,0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="208"/>
+                    <ColumnDefinition Width="206*"/>
+                    <ColumnDefinition Width="207*"/>
+                    <ColumnDefinition Width="208*"/>
+                    <ColumnDefinition Width="207*"/>
+                    <ColumnDefinition Width="208*"/>
+                    <ColumnDefinition Width="207*"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="7" BorderBrush="{StaticResource AppMidBrush}" BorderThickness="0 1 0 1"/>
-                <TextBlock Text="Monday" Grid.Column="0"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Tuesday " Grid.Column="1"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Wednesday" Grid.Column="2"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Thursday" Grid.Column="3"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Friday" Grid.Column="4"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Saturday" Grid.Column="5"  Style="{StaticResource DayOfWeeksyle}"/>
-                <TextBlock Text="Sunday" Grid.Column="6"  Style="{StaticResource DayOfWeeksyle}"/>
+
+                <Border Grid.ColumnSpan="7" BorderThickness="0 1 0 1"/>
+                <TextBlock Text="Sunday"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="39" Margin="65,37,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBlock Text="Monday " Grid.Column="1"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="44" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <TextBlock Text="Tuesday" Grid.Column="2"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="43" HorizontalAlignment="Left" Margin="11,36,0,0" VerticalAlignment="Top"/>
+                <TextBlock Text="Wednesday" Grid.Column="3"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="61" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <TextBlock Text="Thursday" Grid.Column="4"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="48" HorizontalAlignment="Left" Margin="9,36,0,0" VerticalAlignment="Top"/>
+                <TextBlock Text="Friday" Grid.Column="5"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="32" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top"/>
+                <TextBlock Text="Saturday" Grid.Column="6"  Style="{StaticResource DayOfWeeksyle}" Height="16" Width="46" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top"/>
             </Grid>
         </Grid>
     </Grid>
