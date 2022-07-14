@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 using CalendarAppointments.Helpers;
 using CalendarAppointments.Services;
-
+using CalendarAppointments.Views;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 
@@ -63,8 +63,6 @@ namespace CalendarAppointments.ViewModels
 
         private async void OnLoaded()
         {
-            // Keyboard accelerators are added here to avoid showing 'Alt + left' tooltip on the page.
-            // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
             _keyboardAccelerators.Add(_altLeftKeyboardAccelerator);
             _keyboardAccelerators.Add(_backKeyboardAccelerator);
             await Task.CompletedTask;
@@ -74,7 +72,7 @@ namespace CalendarAppointments.ViewModels
         {
             if (args.IsSettingsInvoked)
             {
-                // Navigate to the settings page - implement as appropriate if needed
+                NavigationService.Navigate(typeof(SettingsPage), null, args.RecommendedNavigationTransitionInfo);
             }
             else
             {
@@ -101,6 +99,12 @@ namespace CalendarAppointments.ViewModels
         private void Frame_Navigated(object sender, NavigationEventArgs e)
         {
             IsBackEnabled = NavigationService.CanGoBack;
+            if (e.SourcePageType == typeof(SettingsPage))
+            {
+                Selected = _navigationView.SettingsItem as WinUI.NavigationViewItem;
+                return;
+            }
+
             var selectedItem = GetSelectedItem(_navigationView.MenuItems, e.SourcePageType);
             if (selectedItem != null)
             {

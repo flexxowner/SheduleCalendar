@@ -49,7 +49,7 @@ namespace CalendarAppointments.ViewModels
         }
         private void AddDays()
         {
-            for (int i = 0; i < DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month); i++)
+            for (int i = 0; i < DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month)+1; i++)
             {
                 _days.Add(i);
             }

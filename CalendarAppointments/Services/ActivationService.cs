@@ -11,8 +11,6 @@ using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Services
 {
-    // For more information on understanding and extending activation flow see
-    // https://github.com/microsoft/TemplateStudio/blob/main/docs/UWP/activation.md
     internal class ActivationService
     {
         private readonly App _app;
