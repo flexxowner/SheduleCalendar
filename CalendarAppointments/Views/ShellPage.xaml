@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="CalendarAppointments.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:behaviors="using:CalendarAppointments.Behaviors"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:helpers="using:CalendarAppointments.Helpers"
+    xmlns:views="using:CalendarAppointments.Views"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    mc:Ignorable="d">
+
+    <i:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="Loaded">
+            <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
+        </ic:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <winui:NavigationView
+        x:Name="navigationView"
+        IsBackButtonVisible="Visible"
+        IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
+        IsSettingsVisible="True"
+        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+        <winui:NavigationView.MenuItems>
+            <winui:NavigationViewItem x:Uid="Shell_Search" Icon="Zoom" helpers:NavHelper.NavigateTo="views:SearchPage" />
+            <winui:NavigationViewItem x:Uid="Shell_Day" Icon="CalendarDay" helpers:NavHelper.NavigateTo="views:DayPage" />
+            <winui:NavigationViewItem x:Uid="Shell_Week" Icon="CalendarWeek" helpers:NavHelper.NavigateTo="views:WeekPage" />
+            <winui:NavigationViewItem x:Uid="Shell_Month" Icon="ViewAll" helpers:NavHelper.NavigateTo="views:MonthPage" />
+            <winui:NavigationViewItem x:Uid="Shell_Year"  Icon="Calendar" helpers:NavHelper.NavigateTo="views:YearPage"/>
+            <winui:NavigationViewItem x:Uid="Shell_List" Icon="List" helpers:NavHelper.NavigateTo="views:ListPage" />
+        </winui:NavigationView.MenuItems>
+        <i:Interaction.Behaviors>
+            <ic:EventTriggerBehavior EventName="ItemInvoked">
+                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+            </ic:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+        <Grid>
+            <Frame x:Name="shellFrame" />
+        </Grid>
+    </winui:NavigationView>
+</Page>
