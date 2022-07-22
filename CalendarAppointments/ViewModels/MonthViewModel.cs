@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using CalendarAppointments.Model;
+using CalendarAppointments.Services;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace CalendarAppointments.ViewModels

@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
+    <Compile Include="BackgroundTasks\BackgroundTaskReg.cs" />
+    <Compile Include="BackgroundTasks\BackgroundTask.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="Model\Event.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
+    <Compile Include="Services\BackgroundTaskService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="ViewModels\DayViewModel.cs" />
