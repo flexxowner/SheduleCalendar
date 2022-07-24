@@ -1,7 +1,6 @@
-﻿using System;
-
+﻿
 using CalendarAppointments.ViewModels;
-
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Views
@@ -10,11 +9,13 @@ namespace CalendarAppointments.Views
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
 
+
         public ShellPage()
         {
             InitializeComponent();
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
         }
+
     }
 }

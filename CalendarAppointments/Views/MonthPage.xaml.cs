@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CalendarAppointments.BackgroundTasks;
+using CalendarAppointments.Controllers;
 using CalendarAppointments.Services;
 using CalendarAppointments.ViewModels;
-
 using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Views
@@ -16,5 +17,6 @@ namespace CalendarAppointments.Views
             InitializeComponent();
             BackgroundTaskService.GetBackgroundTasksRegistration<BackgroundTask>();
         }
+
     }
 }

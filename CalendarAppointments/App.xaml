@@ -15,6 +15,9 @@
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
                 <ResourceDictionary Source="/Styles/Page.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <x:String x:Key="ida:ClientId">05746500-a9e5-46b7-a044-3485de53d785</x:String>
+            <x:String x:Key="ida:AADInstance">https://login.microsoftonline.com/</x:String>
+            <x:String x:Key="ida:Domain">flexxdevelop.onmicrosoft.com</x:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
