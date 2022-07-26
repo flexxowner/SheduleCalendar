@@ -15,8 +15,11 @@
         <StackPanel
             x:Name="ContentArea">
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
-                <TextBlock Text="Choose an application theme" Style="{ThemeResource PageTitleStyle}"/>
-
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="CallGraphButton" Content="Sign to account" HorizontalAlignment="Right" Padding="5" Command="{x:Bind GraphControl.CallGraphCommand}" Margin="0,0,20,0" FontFamily="Segoe Ui"/>
+                    <Button x:Name="SignOutButton" Content="Sign-Out" HorizontalAlignment="Right" Padding="5" Command="{x:Bind GraphControl.SignOutCommand}" Margin="5" Visibility="Visible" FontFamily="Segoe Ui"/>
+                </StackPanel>
+                <TextBlock Text="Choose an application theme" Style="{ThemeResource PageTitleStyle}" Width="645" HorizontalAlignment="Left"/>
                 <StackPanel Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
                         x:Uid="Settings_Theme_Light"

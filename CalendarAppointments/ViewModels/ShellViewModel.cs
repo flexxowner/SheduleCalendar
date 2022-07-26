@@ -9,7 +9,6 @@ using CalendarAppointments.Views;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Windows.System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
@@ -152,5 +151,7 @@ namespace CalendarAppointments.ViewModels
             var result = NavigationService.GoBack();
             args.Handled = result;
         }
+
+
     }
 }
