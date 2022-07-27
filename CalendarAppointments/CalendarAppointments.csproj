@@ -131,6 +131,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Office.Interop.Outlook">
+      <Version>15.0.4797.1004</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Office365.OutlookServices">
       <Version>1.0.41</Version>
     </PackageReference>
@@ -153,10 +156,12 @@
     <Compile Include="BackgroundTasks\BackgroundTask.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
-    <Compile Include="Controllers\GraphControl.cs" />
+    <Compile Include="Controllers\GraphService.cs" />
     <Compile Include="Controllers\DefaultRedirectURI.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
+    <Compile Include="Helpers\OutlookItem.cs" />
+    <Compile Include="Helpers\FileManager.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Helpers\VisibleExample.cs" />
     <Compile Include="Model\CalendarDay.cs" />
@@ -282,6 +287,7 @@
     <None Include=".editorconfig" />
     <None Include="CalendarAppointments_TemporaryKey.pfx" />
     <None Include="Connected Services\Access Office 365 Services with Microsoft Graph\ConnectedService.json" />
+    <None Include="Connected Services\Office365\ConnectedService.json" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

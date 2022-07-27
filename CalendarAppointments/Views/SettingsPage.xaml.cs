@@ -10,7 +10,7 @@ namespace CalendarAppointments.Views
     public sealed partial class SettingsPage : Page
     {
         SettingsViewModel ViewModel { get; } = new SettingsViewModel();
-        public GraphControl GraphControl { get; } = new GraphControl();
+        public GraphService GraphControl { get; } = new GraphService();
         public SettingsPage()
         {
             this.InitializeComponent();

@@ -6,11 +6,10 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.Input;
-using Windows.UI.Xaml;
 
 namespace CalendarAppointments.Controllers
 {
-    public class GraphControl
+    public class GraphService
     {
         //Set the scope for API call to user.read
         private string[] scopes = new string[] { "user.read" };
@@ -23,12 +22,15 @@ namespace CalendarAppointments.Controllers
         //   - for any Work or School accounts, use organizations
         //   - for any Work or School accounts, or Microsoft personal account, use common
         //   - for Microsoft Personal account, use consumers
-        private const string ClientId = "3d95ae57-0d7b-4bf6-9a1a-64f1f9866998";
+        private const string ClientId = "4603eb32-dedb-471c-92aa-48c6285e6d52";
 
         private const string Tenant = "common"; // Alternatively "[Enter your tenant, as obtained from the azure portal, e.g. kko365.onmicrosoft.com]"
         private const string Authority = "https://login.microsoftonline.com/" + Tenant;
- 
 
+        IPublicClientApplication pca = PublicClientApplicationBuilder
+            .Create(ClientId)
+            .WithTenantId(Tenant)
+            .Build();
         // The MSAL Public client app
         private static IPublicClientApplication PublicClientApp;
 
@@ -36,7 +38,7 @@ namespace CalendarAppointments.Controllers
         private static AuthenticationResult authResult;
 
 
-        public GraphControl()
+        public GraphService()
         {
             CallGraphCommand = new RelayCommand(CallGraph);
             SignOutCommand = new RelayCommand(SignOut);
@@ -96,6 +98,55 @@ namespace CalendarAppointments.Controllers
             return await Task.FromResult(graphClient);
         }
 
+        public async Task<IUserCalendarsCollectionPage> GetAllCalendars()
+        {
+            var authProvider = new DelegateAuthenticationProvider(async (request) => {
+                // Use Microsoft.Identity.Client to retrieve token
+                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.AccessToken);
+            });
+            GraphServiceClient graphClient = new GraphServiceClient(authProvider);
+            var calendars = await graphClient.Me.Calendars
+                .Request()
+                .GetAsync();
+            return calendars;
+        }
+
+        public async Task<Calendar> GetCalendar()
+        {
+            var authProvider = new DelegateAuthenticationProvider(async (request) => {
+                // Use Microsoft.Identity.Client to retrieve token
+                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.AccessToken);
+            });
+            GraphServiceClient graphClient = new GraphServiceClient(authProvider);
+            var calendar = await graphClient.Me.Calendar
+                .Request()
+                .GetAsync();
+            return calendar;
+        }
+        public async Task<ICalendarEventsCollectionPage> GetEventsAsync()
+        {
+            var authProvider = new DelegateAuthenticationProvider(async (request) => {
+                // Use Microsoft.Identity.Client to retrieve token
+                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.AccessToken);
+            });
+            GraphServiceClient graphClient = new GraphServiceClient(authProvider);
+            var events = await graphClient.Me.Calendar.Events
+                .Request()
+                .Filter("startsWith(subject,'All')")
+                .GetAsync();
+            return events;
+        }
+
+
         public RelayCommand CallGraphCommand { get; set; }
         private async void CallGraph()
         {
@@ -103,7 +154,7 @@ namespace CalendarAppointments.Controllers
             GraphServiceClient graphClient = await SignInAndInitializeGraphServiceClient(scopes);
 
             // Call the /me endpoint of Graph
-            Microsoft.Graph.User graphUser = await graphClient.Me.Request().GetAsync();
+          User graphUser = await graphClient.Me.Request().GetAsync();
         }
         public RelayCommand SignOutCommand { get; set; }
         private async void SignOut()
