@@ -1,9 +1,6 @@
 ﻿using System;
-
-using CalendarAppointments.ViewModels;
-
 using Windows.UI.Xaml.Controls;
-
+using CalendarAppointments.ViewModel.ViewModels;
 namespace CalendarAppointments.Views
 {
     public sealed partial class WeekPage : Page

@@ -12,18 +12,19 @@ namespace CalendarAppointments.Behaviors
 {
     public class NavigationViewHeaderBehavior : Behavior<WinUI.NavigationView>
     {
-        private static NavigationViewHeaderBehavior _current;
-        private Page _currentPage;
+        public static readonly DependencyProperty HeaderTemplateProperty =
+            DependencyProperty.RegisterAttached("HeaderTemplate", typeof(DataTemplate), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeaderTemplate()));
+
+        public static readonly DependencyProperty HeaderContextProperty =
+            DependencyProperty.RegisterAttached("HeaderContext", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
+
+        public static readonly DependencyProperty HeaderModeProperty =
+            DependencyProperty.RegisterAttached("HeaderMode", typeof(bool), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(NavigationViewHeaderMode.Always, (d, e) => _current.UpdateHeader()));
 
         public DataTemplate DefaultHeaderTemplate { get; set; }
-
-        public object DefaultHeader
-        {
-            get { return GetValue(DefaultHeaderProperty); }
-            set { SetValue(DefaultHeaderProperty, value); }
-        }
-
         public static readonly DependencyProperty DefaultHeaderProperty = DependencyProperty.Register("DefaultHeader", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
+        private static NavigationViewHeaderBehavior _current;
+        private Page _currentPage;
 
         public static NavigationViewHeaderMode GetHeaderMode(Page item)
         {
@@ -35,9 +36,6 @@ namespace CalendarAppointments.Behaviors
             item.SetValue(HeaderModeProperty, value);
         }
 
-        public static readonly DependencyProperty HeaderModeProperty =
-            DependencyProperty.RegisterAttached("HeaderMode", typeof(bool), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(NavigationViewHeaderMode.Always, (d, e) => _current.UpdateHeader()));
-
         public static object GetHeaderContext(Page item)
         {
             return item.GetValue(HeaderContextProperty);
@@ -47,9 +45,6 @@ namespace CalendarAppointments.Behaviors
         {
             item.SetValue(HeaderContextProperty, value);
         }
-
-        public static readonly DependencyProperty HeaderContextProperty =
-            DependencyProperty.RegisterAttached("HeaderContext", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
 
         public static DataTemplate GetHeaderTemplate(Page item)
         {
@@ -61,8 +56,11 @@ namespace CalendarAppointments.Behaviors
             item.SetValue(HeaderTemplateProperty, value);
         }
 
-        public static readonly DependencyProperty HeaderTemplateProperty =
-            DependencyProperty.RegisterAttached("HeaderTemplate", typeof(DataTemplate), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeaderTemplate()));
+        public object DefaultHeader
+        {
+            get { return GetValue(DefaultHeaderProperty); }
+            set { SetValue(DefaultHeaderProperty, value); }
+        }
 
         protected override void OnAttached()
         {

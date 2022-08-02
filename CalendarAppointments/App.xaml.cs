@@ -1,7 +1,6 @@
 ﻿using System;
 
-using CalendarAppointments.Services;
-
+using CalendarAppointments.Activation;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 

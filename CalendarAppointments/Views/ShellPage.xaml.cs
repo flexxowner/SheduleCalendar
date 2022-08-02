@@ -1,14 +1,14 @@
-﻿
-using CalendarAppointments.Controllers;
-using CalendarAppointments.ViewModels;
-using Windows.UI.Xaml;
+﻿using CalendarAppointments.Services;
 using Windows.UI.Xaml.Controls;
+using Helpers.Helpers;
+using CalendarAppointments.Controllers;
 
 namespace CalendarAppointments.Views
 {
     public sealed partial class ShellPage : Page
     {
-        public ShellViewModel ViewModel { get; } = new ShellViewModel();
+        ShellService ViewModel { get; } = new ShellService();
+        GraphService GraphControl { get; } = new GraphService();
         public ShellPage()
         {
             InitializeComponent();

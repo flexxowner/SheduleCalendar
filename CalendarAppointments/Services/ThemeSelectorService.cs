@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Helpers.Helpers;
+using System;
 using System.Threading.Tasks;
-
-using CalendarAppointments.Helpers;
-
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
 using Windows.UI.Core;
@@ -13,7 +11,6 @@ namespace CalendarAppointments.Services
     public static class ThemeSelectorService
     {
         private const string SettingsKey = "AppBackgroundRequestedTheme";
-
         public static ElementTheme Theme { get; set; } = ElementTheme.Default;
 
         public static async Task InitializeAsync()

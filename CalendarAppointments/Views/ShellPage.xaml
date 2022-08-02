@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:behaviors="using:CalendarAppointments.Behaviors"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:helpers="using:CalendarAppointments.Helpers"
+    xmlns:helpers="using:Helpers.Helpers"
     xmlns:views="using:CalendarAppointments.Views"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
@@ -34,10 +34,12 @@
             <winui:NavigationViewItem x:Uid="Shell_Year"  Icon="Calendar" helpers:NavHelper.NavigateTo="views:YearPage"/>
             <winui:NavigationViewItem x:Uid="Shell_List" Icon="List" helpers:NavHelper.NavigateTo="views:ListPage" />
         </winui:NavigationView.MenuItems>
+        <winui:NavigationView.Header>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CallGraphButton" Content="Call Microsoft Graph API" HorizontalAlignment="Right" Padding="5" Command="{x:Bind GraphControl.CallGraphCommand}" Margin="5" FontFamily="Segoe Ui"/>
+            </StackPanel>
+        </winui:NavigationView.Header>
         <i:Interaction.Behaviors>
-            <behaviors:NavigationViewHeaderBehavior
-                DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}">
-            </behaviors:NavigationViewHeaderBehavior>
             <ic:EventTriggerBehavior EventName="ItemInvoked">
                 <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
             </ic:EventTriggerBehavior>

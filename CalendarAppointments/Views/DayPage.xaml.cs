@@ -1,7 +1,4 @@
-﻿using System;
-
-using CalendarAppointments.ViewModels;
-
+﻿using CalendarAppointments.ViewModel.ViewModels;
 using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Views

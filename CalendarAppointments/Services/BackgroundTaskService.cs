@@ -1,12 +1,12 @@
-﻿using CalendarAppointments.Activation;
-using CalendarAppointments.BackgroundTasks;
+﻿using CalendarAppointments.BackgroundTasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalendarAppointments.Core.Helpers;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
+using CalendarAppointments.Activation;
+using CalendarAppointments.Core.Helpers;
 
 namespace CalendarAppointments.Services
 {
