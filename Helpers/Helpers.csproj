@@ -144,6 +144,10 @@
       <Project>{C2676221-0DB8-4A53-A7D6-C6995308A3D1}</Project>
       <Name>CalendarAppointments.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CalendarAppointments.Models\Models.csproj">
+      <Project>{401F26A7-59AB-4F2F-857C-6900631BD4AD}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

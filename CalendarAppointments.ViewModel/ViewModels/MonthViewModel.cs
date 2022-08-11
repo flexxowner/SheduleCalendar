@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CalendarAppointments.Models.Models;
+using CalendarAppointments.ViewModel.DialogPage;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
     public class MonthViewModel : ObservableObject
     {
-        private readonly ObservableCollection<Event> events;
         public RelayCommand GoBackCommand { get; set; }
         public RelayCommand GoForwardCommand { get; set; }
-        private DateTime today = DateTime.Now;
+        public RelayCommand OpenDialogCommand { get; set; }
+        public RelayCommand SaveEventCommand { get; set; }
+        public int SelectedItem { get; set; }
+        private DateTimeOffset today = DateTimeOffset.Now;
         private ObservableCollection<CalendarMonth> months;
         private ObservableCollection<CalendarDay> days;
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<string> firstDayOfWeek;
+        private ObservableCollection<Event> events;
         private int currentMonth;
         private int currentYear;
+        private string eventContent;
 
         public MonthViewModel()
         {
@@ -29,14 +36,22 @@ namespace CalendarAppointments.ViewModel.ViewModels
             };
             days = new ObservableCollection<CalendarDay>();
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
+            events = new ObservableCollection<Event>();
             CurrentMonth = today.Month;
             CurrentYear = today.Year;
+            EventContent = "Enter theme";
             AddDaysOfMonth();
             GetListOfWeekDays();
             AddDaysOfWeek();
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
-
+            OpenDialogCommand = new RelayCommand(OpenDialog);
+            SaveEventCommand = new RelayCommand(SaveEvent);
+        }
+        public DateTimeOffset Today
+        {
+            get { return today; }
+            set { SetProperty(ref today, value); }
         }
 
         public ObservableCollection<string> FirstDayOfWeek
@@ -55,6 +70,12 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             get { return currentYear; }
             set { currentYear = value; }
+        }
+
+        public string EventContent
+        {
+            get { return eventContent; }
+            set { eventContent = value; }
         }
 
         public ObservableCollection<CalendarMonth> Months
@@ -78,6 +99,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         public ObservableCollection<Event> Events
         {
             get { return events; }
+            set { events = value; }
         }
 
         private void AddDaysOfMonth()
@@ -120,6 +142,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             {
                 daysOfWeeks.Add(new DaysOfWeek() { DayOfWeek = FirstDayOfWeek[i] });
             }
+
         }
 
         private void GoBack()
@@ -175,5 +198,36 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 months[i] = new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year };
             }
         }
+
+        private async void OpenDialog()
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Content = new EventPage(),
+                CloseButtonText = "Close",
+                SecondaryButtonCommand = SaveEventCommand,
+                SecondaryButtonText = "Save"
+            };
+            await dialog.ShowAsync();
+        }
+
+        private void SaveEvent()
+        {
+            events.Add(new Event() { StartTime = today, Title = eventContent});
+
+            for (int i = 0; i < Days.Count; i++)
+            {
+                for (int j = 0; j < events.Count; j++)
+                {
+                    if (events[j].StartTime.Day == Days[i].Number && events[j].StartTime.Month == CurrentMonth && events[j].StartTime.Year == CurrentYear)
+                    {
+                        Days[i].Events.Add(events[j]);
+                    }
+                }
+            }
+
+
+        }
+
     }
 }

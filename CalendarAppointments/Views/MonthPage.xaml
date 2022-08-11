@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models1="using:CalendarAppointments.Models.Models"
+    xmlns:vm ="using:CalendarAppointments.ViewModel.ViewModels"
+    xmlns:helper ="using:Helpers.Helpers" xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -36,33 +38,42 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="2">
-                <GridView ItemsSource="{x:Bind ViewModel.Days, Mode=TwoWay}" Width="Auto">
+                <GridView ItemsSource="{x:Bind ViewModel.Days, Mode=TwoWay}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedItem}" >
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models1:CalendarDay">
+                        <DataTemplate x:DataType="models1:CalendarDay" x:Name="DayDataTemplate" >
                             <RelativePanel Height="130" Width="162,5">
                                 <TextBlock Text="{x:Bind Number}"/>
+                                <ListView ItemsSource="{x:Bind Events, Mode=TwoWay}">
+                                    <DataTemplate x:DataType="models1:Event">
+                                        <StackPanel>
+                                            <TextBlock Text="{x:Bind Title}" Foreground="Green"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView>
                             </RelativePanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
             <Grid Grid.Row="0">
+                <RelativePanel HorizontalAlignment="Right" Margin="0,8">
+                    <Button Content="Add" Command="{x:Bind ViewModel.OpenDialogCommand}" HorizontalAlignment="Right" Height="Auto" Width="Auto"/>
+                </RelativePanel>
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Horizontal" Width="120">
-                    <Button Content="Next" Command="{x:Bind ViewModel.GoForwardCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"  />
-
-                    <Button Content="Prev" Command="{x:Bind ViewModel.GoBackCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"/>
+                        <Button Content="Next" Command="{x:Bind ViewModel.GoForwardCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"  />
+                        <Button Content="Prev" Command="{x:Bind ViewModel.GoBackCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"/>
                     </StackPanel>
                     <GridView ItemsSource="{x:Bind ViewModel.Months, Mode=TwoWay}">
-                    <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models1:CalendarMonth">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="{x:Bind Month.ToUpper()}" Height="Auto" Width="80" Style="{StaticResource DayOfWeeksyle}"/>
-                                <TextBlock Text="{x:Bind Year, Mode=TwoWay}" Height="Auto" Width="50" Style="{StaticResource DayOfWeeksyle}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="models1:CalendarMonth">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{x:Bind Month.ToUpper()}" Height="Auto" Width="80" Style="{StaticResource DayOfWeeksyle}"/>
+                                    <TextBlock Text="{x:Bind Year, Mode=TwoWay}" Height="Auto" Width="50" Style="{StaticResource DayOfWeeksyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1" Margin="0,0" >

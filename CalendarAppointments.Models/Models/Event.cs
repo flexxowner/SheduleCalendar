@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace CalendarAppointments.Models.Models
 {
-    public class Event
+    public class Event 
     {
         public string Title { get; set; }
-        public string Details { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
     }
 }

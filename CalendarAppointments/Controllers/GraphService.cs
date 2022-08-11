@@ -7,11 +7,12 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.Input;
 
+
 namespace CalendarAppointments.Controllers
 {
     public class GraphService
     {
-        private const string ClientId = "4603eb32-dedb-471c-92aa-48c6285e6d52";
+        private const string ClientId = "efaa2831-d90e-4876-8fd3-560952cdff66";
         private const string Tenant = "common";
         private const string Authority = "https://login.microsoftonline.com/" + Tenant;
         public RelayCommand SignOutCommand { get; set; }
@@ -20,7 +21,7 @@ namespace CalendarAppointments.Controllers
         private static string MSGraphURL = "https://graph.microsoft.com/v1.0/";
         private static AuthenticationResult authResult;
         private string[] scopes = new string[] { "user.read" };
-        private IPublicClientApplication pca = PublicClientApplicationBuilder
+        private IPublicClientApplication Pca = PublicClientApplicationBuilder
             .Create(ClientId)
             .WithTenantId(Tenant)
             .Build();
@@ -34,7 +35,7 @@ namespace CalendarAppointments.Controllers
         public async Task<IUserCalendarsCollectionPage> GetAllCalendars()
         {
             var authProvider = new DelegateAuthenticationProvider(async (request) => {
-                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+                var result = await Pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
 
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", result.AccessToken);
@@ -50,10 +51,10 @@ namespace CalendarAppointments.Controllers
         {
             var authProvider = new DelegateAuthenticationProvider(async (request) => {
                 
-                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+                var result = await Pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
 
                 request.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                    new AuthenticationHeaderValue("bearer", result.AccessToken);
             });
             GraphServiceClient graphClient = new GraphServiceClient(authProvider);
             var calendar = await graphClient.Me.Calendar
@@ -65,10 +66,10 @@ namespace CalendarAppointments.Controllers
         {
             var authProvider = new DelegateAuthenticationProvider(async (request) => {
 
-                var result = await pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
+                var result = await Pca.AcquireTokenByIntegratedWindowsAuth(scopes).ExecuteAsync();
 
                 request.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                    new AuthenticationHeaderValue("bearer", result.AccessToken);
             });
             GraphServiceClient graphClient = new GraphServiceClient(authProvider);
             var events = await graphClient.Me.Calendar.Events
@@ -83,7 +84,7 @@ namespace CalendarAppointments.Controllers
             PublicClientApp = PublicClientApplicationBuilder.Create(ClientId)
                 .WithAuthority(Authority)
                 .WithUseCorporateNetwork(false)
-                .WithRedirectUri("https://login.microsoftonline.com/common/oauth2/nativeclient")
+                .WithRedirectUri(DefaultRedirectUri.Value)
                  .WithLogging((level, message, containsPii) =>
                  {
                      Debug.WriteLine($"MSAL: {level} {message} ");
@@ -112,8 +113,15 @@ namespace CalendarAppointments.Controllers
 
         private async void CallGraph()
         {
-          GraphServiceClient graphClient = await SignInAndInitializeGraphServiceClient(scopes);
-          User graphUser = await graphClient.Me.Request().GetAsync();
+            try
+            {
+                GraphServiceClient graphClient = await SignInAndInitializeGraphServiceClient(scopes);
+                User GraphUser = await graphClient.Me.Request().GetAsync();
+            }
+            catch (ServiceException)
+            {
+
+            }
         }
 
         private async void SignOut()
