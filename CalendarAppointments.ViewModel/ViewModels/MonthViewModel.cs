@@ -20,10 +20,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
         public int SelectedItem { get; set; }
         private DateTimeOffset today = DateTimeOffset.Now;
         private ObservableCollection<CalendarMonth> months;
-        private ObservableCollection<CalendarDay> days;
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<string> firstDayOfWeek;
         private ObservableCollection<Event> events;
+        private ObservableCollection<CalendarDay> calendarDays;
         private int currentMonth;
         private int currentYear;
         private string eventContent;
@@ -34,9 +34,9 @@ namespace CalendarAppointments.ViewModel.ViewModels
             {
                 new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year}
             };
-            days = new ObservableCollection<CalendarDay>();
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
             events = new ObservableCollection<Event>();
+            calendarDays = new ObservableCollection<CalendarDay>();
             CurrentMonth = today.Month;
             CurrentYear = today.Year;
             EventContent = "Enter theme";
@@ -84,16 +84,17 @@ namespace CalendarAppointments.ViewModel.ViewModels
             set { months = value; }
         }
 
-        public ObservableCollection<CalendarDay> Days 
-        { 
-            get { return days; } 
-            set { days = value; }
-        }
 
         public ObservableCollection<DaysOfWeek> DaysOfWeeks
         { 
             get { return daysOfWeeks; } 
             set { daysOfWeeks = value; }
+        }
+
+        public ObservableCollection<CalendarDay> CalendarDays
+        {
+            get { return calendarDays; }
+            set { calendarDays = value; }
         }
 
         public ObservableCollection<Event> Events
@@ -104,11 +105,11 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         private void AddDaysOfMonth()
         {
-            days.Clear();
+            calendarDays.Clear();
 
             for (int i = 1; i < DateTime.DaysInMonth(CurrentYear, CurrentMonth) + 1; i++)
             {
-                days.Add(new CalendarDay { Number = i });
+                calendarDays.Add(new CalendarDay { Number = i });
             }
         }
 
@@ -215,13 +216,13 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             events.Add(new Event() { StartTime = today, Title = eventContent});
 
-            for (int i = 0; i < Days.Count; i++)
+            for (int i = 0; i < calendarDays.Count; i++)
             {
                 for (int j = 0; j < events.Count; j++)
                 {
-                    if (events[j].StartTime.Day == Days[i].Number && events[j].StartTime.Month == CurrentMonth && events[j].StartTime.Year == CurrentYear)
+                    if (events[j].StartTime.Day == calendarDays[i].Number && events[j].StartTime.Month == CurrentMonth && events[j].StartTime.Year == CurrentYear)
                     {
-                        Days[i].Events.Add(events[j]);
+                        CalendarDays[i].Events.Add(events[j]);
                     }
                 }
             }

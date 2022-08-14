@@ -2,43 +2,48 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using CalendarAppointments.Models.Models;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Windows.UI.Xaml;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
-    public class DayViewModel : ObservableObject, INotifyPropertyChanged
+    public class DayViewModel : ObservableObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        CultureInfo myCulture = new CultureInfo("en-US");
+        Calendar cal = new CultureInfo("en-US").Calendar;
         public IEnumerable<string> Hours { get; set; }
-        private ObservableCollection<string> firstDayOfWeek;
+        public RelayCommand GoBackCommand { get; set; }
+        public RelayCommand GoForwardCommand { get; set; }
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
-        private DateTimeOffset today = DateTimeOffset.Now;
-        private int currentMonth;
-        private int currentYear;
-        private string currentDayOfWeek;
-        private int currentDay;
-        private DateTime currentTime;
-        private string time;
-
+        private ObservableCollection<CalendarDay> calendarDays;
+        private ObservableCollection<Day> days;
+        private DateTime today = DateTime.Now;
+        private DateTime tomorrow;
+        private int currentWeek;
+        private int tomorrowWeek;
+        public string month;
+        public string tomorrowMonth;
         public DayViewModel()
         {
-            StartClock();
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
-            CurrentMonth = today.Month;
-            CurrentYear = today.Year;
-            CurrentDayOfWeek = today.DayOfWeek.ToString();
-            CurrentDay = today.Day;
+            calendarDays = new ObservableCollection<CalendarDay>();
+            tomorrow = today.AddDays(1);
+            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
+            tomorrowWeek = cal.GetWeekOfYear(today.AddDays(1), CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            days = new ObservableCollection<Day>()
+            {
+                new Day() {Today = today, Tomorrow = tomorrow, CurrentWeek = currentWeek, TomorrowWeek = tomorrowWeek, Month = month, TomorrowMonth = tomorrowMonth}
+            };
             Hours = Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i)).ToString("H:mm"));
-        }
-
-        public ObservableCollection<string> FirstDayOfWeek
-        {
-            get { return firstDayOfWeek; }
-            set { firstDayOfWeek = value; }
+            GoBackCommand = new RelayCommand(GoBack);
+            GoForwardCommand = new RelayCommand(GoForward);
         }
 
         public ObservableCollection<DaysOfWeek> DaysOfWeeks
@@ -46,74 +51,49 @@ namespace CalendarAppointments.ViewModel.ViewModels
             get { return daysOfWeeks; }
             set { daysOfWeeks = value; }
         }
+        public ObservableCollection<CalendarDay> CalendarDays
+        {
+            get { return calendarDays; }
+            set { calendarDays = value; }
+        }
 
-        public DateTimeOffset Today
+        public ObservableCollection<Day> Days
+        {
+            get { return days; }
+            set { days = value; }
+        }
+        public DateTime Today
         {
             get { return today; }
-            set { SetProperty(ref today, value); }
+            set { today = value; }
         }
 
-        public int CurrentMonth
+        private void GoBack()
         {
-            get { return currentMonth; }
-            set { currentMonth = value; }
-        }
-
-        public int CurrentYear
-        {
-            get { return currentYear; }
-            set { currentYear = value; }
-        }
-
-        public string CurrentDayOfWeek
-        {
-            get { return currentDayOfWeek;}
-            set { SetProperty(ref currentDayOfWeek, value); }
-        }
-
-        public int CurrentDay
-        {
-            get { return currentDay;}
-            set { currentDay = value; }
-        }
-
-        public string Time
-        {
-            get
+            today = today.AddDays(-1);
+            tomorrow = tomorrow.AddDays(-1);
+            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
+            tomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            for (int i = 0; i < days.Count; i++)
             {
-                return time;
-            }
-            set
-            {
-                time = value;
-                this.OnPropertyChanged();
-
+                days[i] = new Day() { CurrentWeek = currentWeek, Today = today, Tomorrow = tomorrow, Month = month, TomorrowMonth = tomorrowMonth, TomorrowWeek = tomorrowWeek };
             }
         }
 
-        private void StartClock()
+        private void GoForward()
         {
-            currentTime = DateTime.Now;
-            DispatcherTimer clocktimer = new DispatcherTimer();
-            clocktimer.Interval = TimeSpan.FromSeconds(1);
-            clocktimer.Tick += Clocktimer_Tick;
-            clocktimer.Start();
-        }
-
-        private void Clocktimer_Tick(object sender, object e)
-        {
-            currentTime = DateTime.Now;
-            updateTimeDisplay(currentTime);
-        }
-
-        private void updateTimeDisplay(DateTime time)
-        {
-            Time = time.ToString(@"HH:mm:ss");
-        }
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            today = today.AddDays(1);
+            tomorrow = tomorrow.AddDays(1);
+            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
+            tomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            for (int i = 0; i < days.Count; i++)
+            {
+                days[i] = new Day() { CurrentWeek = currentWeek, Today = today, Tomorrow = tomorrow, Month = month, TomorrowMonth = tomorrowMonth, TomorrowWeek = tomorrowWeek };
+            }
         }
     }
 }

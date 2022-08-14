@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CalendarAppointments.Models.Models
 {
-    public class CalendarDay 
+    public class CalendarDay
     {
         public int Number { get; set; }
 

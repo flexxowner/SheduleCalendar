@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Models\CalendarMonth.cs" />
     <Compile Include="Models\CalendarDay.cs" />
+    <Compile Include="Models\Day.cs" />
     <Compile Include="Models\DaysOfWeek.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

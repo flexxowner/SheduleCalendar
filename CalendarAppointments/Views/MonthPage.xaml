@@ -38,9 +38,9 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="2">
-                <GridView ItemsSource="{x:Bind ViewModel.Days, Mode=TwoWay}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedItem}" >
+                <GridView ItemsSource="{x:Bind ViewModel.CalendarDays, Mode=TwoWay}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedItem}" >
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models1:CalendarDay" x:Name="DayDataTemplate" >
+                        <DataTemplate x:DataType ="models1:CalendarDay" >
                             <RelativePanel Height="130" Width="162,5">
                                 <TextBlock Text="{x:Bind Number}"/>
                                 <ListView ItemsSource="{x:Bind Events, Mode=TwoWay}">
