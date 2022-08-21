@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace CalendarAppointments.ViewModel.DialogPage
+namespace Controls.Controls
 {
-    public sealed partial class CalendarCell : UserControl
+    public sealed partial class EventControlMonthPage : UserControl
     {
-        public CalendarCell()
+        public EventControlMonthPage()
         {
             this.InitializeComponent();
         }

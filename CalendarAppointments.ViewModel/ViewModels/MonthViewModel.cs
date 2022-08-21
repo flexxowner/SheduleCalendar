@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using CalendarAppointments.Models.Models;
-using CalendarAppointments.ViewModel.DialogPage;
+using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Windows.UI.Xaml;
+using Newtonsoft.Json;
+using Windows.Storage;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
@@ -15,10 +20,11 @@ namespace CalendarAppointments.ViewModel.ViewModels
     {
         public RelayCommand GoBackCommand { get; set; }
         public RelayCommand GoForwardCommand { get; set; }
-        public RelayCommand OpenDialogCommand { get; set; }
-        public RelayCommand SaveEventCommand { get; set; }
-        public int SelectedItem { get; set; }
+        public RelayCommand AddEventCommand { get; set; }
+        private CalendarDay selectedDay;
         private DateTimeOffset today = DateTimeOffset.Now;
+        private TimeSpan startTime;
+        private TimeSpan endTime;
         private ObservableCollection<CalendarMonth> months;
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<string> firstDayOfWeek;
@@ -26,8 +32,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private ObservableCollection<CalendarDay> calendarDays;
         private int currentMonth;
         private int currentYear;
-        private string eventContent;
-
+        private string eventSubject;
+        private bool isOpen;
         public MonthViewModel()
         {
             months = new ObservableCollection<CalendarMonth>()
@@ -35,84 +41,107 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year}
             };
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
-            events = new ObservableCollection<Event>();
             calendarDays = new ObservableCollection<CalendarDay>();
+            events = new ObservableCollection<Event>();
             CurrentMonth = today.Month;
             CurrentYear = today.Year;
-            EventContent = "Enter theme";
             AddDaysOfMonth();
             GetListOfWeekDays();
             AddDaysOfWeek();
+            ReadFromFile();
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
-            OpenDialogCommand = new RelayCommand(OpenDialog);
-            SaveEventCommand = new RelayCommand(SaveEvent);
+            AddEventCommand = new RelayCommand(AddEvent);
         }
+
         public DateTimeOffset Today
         {
             get { return today; }
             set { SetProperty(ref today, value); }
         }
-
         public ObservableCollection<string> FirstDayOfWeek
         {
             get { return firstDayOfWeek; }
             set { firstDayOfWeek = value; }
         }
-        
         public int CurrentMonth
         {
             get { return currentMonth; }
             set { currentMonth = value; }
         }
-       
         public int CurrentYear
         {
             get { return currentYear; }
             set { currentYear = value; }
         }
-
-        public string EventContent
-        {
-            get { return eventContent; }
-            set { eventContent = value; }
-        }
-
         public ObservableCollection<CalendarMonth> Months
         {
             get { return months; }
             set { months = value; }
         }
-
-
         public ObservableCollection<DaysOfWeek> DaysOfWeeks
         { 
             get { return daysOfWeeks; } 
             set { daysOfWeeks = value; }
         }
-
         public ObservableCollection<CalendarDay> CalendarDays
         {
             get { return calendarDays; }
             set { calendarDays = value; }
         }
-
         public ObservableCollection<Event> Events
         {
             get { return events; }
             set { events = value; }
         }
 
+        public CalendarDay SelectedDay
+        {
+            get { return selectedDay; }
+            set { selectedDay = value; }
+        }
+        public string EventSubject
+        {
+            get { return eventSubject; }
+            set { eventSubject = value; }
+        }
+        public TimeSpan StartTime
+        {
+            get { return startTime; }
+            set
+            { 
+                startTime = value;
+                OnPropertyChanged("StartTime");
+            }
+        }
+        public TimeSpan EndTime
+        {
+            get { return endTime; }
+            set
+            { 
+                endTime = value;
+                OnPropertyChanged("EndTime");
+            }
+        }
+        public bool IsOpen
+        {
+            get { return isOpen; }
+            set
+            {
+                if (isOpen == value) return;
+                isOpen = value;
+                OnPropertyChanged("IsOpen");
+            }
+        }
         private void AddDaysOfMonth()
         {
             calendarDays.Clear();
 
             for (int i = 1; i < DateTime.DaysInMonth(CurrentYear, CurrentMonth) + 1; i++)
             {
-                calendarDays.Add(new CalendarDay { Number = i });
+                calendarDays.Add(new CalendarDay { Date = new DateTime(CurrentYear, CurrentMonth, i) });
             }
         }
-
         private ObservableCollection<string> GetListOfWeekDays()
         {
             var firstDayOfMonth = new DateTime(CurrentYear, CurrentMonth, 1);
@@ -134,7 +163,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             FirstDayOfWeek = temp;
             return FirstDayOfWeek;
         }
-
         private void AddDaysOfWeek()
         {
             daysOfWeeks.Clear();
@@ -145,7 +173,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             }
 
         }
-
         private void GoBack()
         {
             CurrentMonth = CurrentMonth - 1;
@@ -165,14 +192,16 @@ namespace CalendarAppointments.ViewModel.ViewModels
             GetListOfWeekDays();
             AddDaysOfWeek();
             AddDaysOfMonth();
+            ReadFromFile();
+            SaveEvent();
             today = new DateTime(CurrentYear, CurrentMonth, 1);
 
             for (int i = 0; i < months.Count; i++)
             {
                 months[i] = new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year };
             }
-        }
 
+        }
         private void GoForward()
         {
             CurrentMonth = CurrentMonth + 1;
@@ -192,6 +221,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
             GetListOfWeekDays();
             AddDaysOfWeek();
             AddDaysOfMonth();
+            SaveEvent();
+            ReadFromFile();
             today = new DateTime(CurrentYear, CurrentMonth, 1);
 
             for (int i = 0; i < months.Count; i++)
@@ -199,36 +230,93 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 months[i] = new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year };
             }
         }
-
-        private async void OpenDialog()
+        public void HandleDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            ContentDialog dialog = new ContentDialog
-            {
-                Content = new EventPage(),
-                CloseButtonText = "Close",
-                SecondaryButtonCommand = SaveEventCommand,
-                SecondaryButtonText = "Save"
-            };
-            await dialog.ShowAsync();
+            IsOpen = true;
+            isOpen = false;
         }
-
+        private void AddEvent()
+        {
+            if (EndTime > StartTime)
+            {
+                events.Add(new Event() { StartTime = StartTime, EndTime = EndTime, StartDate = SelectedDay.Date, Subject = eventSubject });
+                SaveToFile();
+                SaveEvent();
+            }
+            else
+            {
+                WarningDialog();
+            }
+        }
         private void SaveEvent()
         {
-            events.Add(new Event() { StartTime = today, Title = eventContent});
-
-            for (int i = 0; i < calendarDays.Count; i++)
+            if (events != null && SelectedDay != null)
             {
-                for (int j = 0; j < events.Count; j++)
+                var filterDays = from day in calendarDays
+                                   where day.Date == SelectedDay.Date
+                                   select day;
+                var filterEvents = from e in events
+                                   where e.StartDate == SelectedDay.Date && !SelectedDay.Events.Contains(e)
+                                   select e;
+                foreach (var day in filterDays)
                 {
-                    if (events[j].StartTime.Day == calendarDays[i].Number && events[j].StartTime.Month == CurrentMonth && events[j].StartTime.Year == CurrentYear)
+                    foreach (var e in filterEvents)
                     {
-                        CalendarDays[i].Events.Add(events[j]);
+                        day.Events.Add(e);
                     }
                 }
             }
-
-
         }
+        private void ShowEvents()
+        {
+            foreach (var e in events)
+            {
+                foreach (var day in calendarDays)
+                {
+                    if (e.StartDate == day.Date)
+                    {
+                        day.Events.Add(e);
+                    }
+                }
+            }
+        }
+        private async void WarningDialog()
+        {
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "Warning!",
+                Content = "The start time of the meeting must be earlier than the end time.",
+                CloseButtonText = "Ok"
+            };
+            await dialog.ShowAsync();
+        }
+        private async void SaveToFile()
+        {
+            string rootFrameDataString = ObjectSerializer<ObservableCollection<Event>>.ToXml(events);
+            if (!string.IsNullOrEmpty(rootFrameDataString))
+            {
+                StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync("events.xml", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(localFile, rootFrameDataString);
+            }
+        }
+        private async void ReadFromFile()
+        {
+            StorageFile localFile;
+            try
+            {
+                localFile = await ApplicationData.Current.LocalFolder.GetFileAsync("events.xml");
+            }
+            catch (FileNotFoundException ex)
+            {
+                localFile = null;
+            }
+            if (localFile != null )
+            {
+                string localData = await FileIO.ReadTextAsync(localFile);
 
+                events = ObjectSerializer<ObservableCollection<Event>>.FromXml(localData);
+                ShowEvents();
+            }
+        }
     }
 }

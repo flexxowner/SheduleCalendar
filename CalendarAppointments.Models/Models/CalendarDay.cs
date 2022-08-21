@@ -9,7 +9,7 @@ namespace CalendarAppointments.Models.Models
 {
     public class CalendarDay
     {
-        public int Number { get; set; }
+        public DateTime Date { get; set; }
 
         private ObservableCollection<Event> events;
 

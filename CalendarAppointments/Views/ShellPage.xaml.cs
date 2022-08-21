@@ -12,7 +12,7 @@ namespace CalendarAppointments.Views
         public ShellPage()
         {
             InitializeComponent();
-            DataContext = ViewModel;
+            DataContext = GraphControl;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
         }
 

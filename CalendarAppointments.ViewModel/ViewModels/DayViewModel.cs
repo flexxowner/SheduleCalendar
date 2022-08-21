@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using CalendarAppointments.Models.Models;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Windows.UI.Xaml;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
@@ -56,7 +54,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             get { return calendarDays; }
             set { calendarDays = value; }
         }
-
         public ObservableCollection<Day> Days
         {
             get { return days; }
@@ -67,7 +64,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             get { return today; }
             set { today = value; }
         }
-
         private void GoBack()
         {
             today = today.AddDays(-1);
@@ -81,7 +77,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 days[i] = new Day() { CurrentWeek = currentWeek, Today = today, Tomorrow = tomorrow, Month = month, TomorrowMonth = tomorrowMonth, TomorrowWeek = tomorrowWeek };
             }
         }
-
         private void GoForward()
         {
             today = today.AddDays(1);

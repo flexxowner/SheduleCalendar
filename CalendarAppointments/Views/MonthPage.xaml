@@ -8,6 +8,7 @@
     xmlns:vm ="using:CalendarAppointments.ViewModel.ViewModels"
     xmlns:helper ="using:Helpers.Helpers" xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
+    x:Name="month"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Color x:Key="AppMidColor">#737272</Color>
@@ -38,33 +39,75 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="2">
-                <GridView ItemsSource="{x:Bind ViewModel.CalendarDays, Mode=TwoWay}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedItem}" >
+                <RelativePanel>
+                    <Popup x:Name="EventPopUp" Height="850" Width="300" IsOpen="{Binding IsOpen, Mode=OneWay}" RelativePanel.AlignLeftWithPanel="True" IsLightDismissEnabled="True" LightDismissOverlayMode="On">
+                        <StackPanel Orientation="Vertical" Background="Gray" Height="{Binding ElementName=EventPopUp, Path=Height}" Width="{Binding ElementName=EventPopUp, Path=Width}">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Title:" FontSize="15" Height="Auto" Width="Auto"/>
+                                    <TextBox Text="{Binding EventSubject, Mode = TwoWay}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Start Time:" Height="Auto" Width="Auto" FontSize="15"/>
+                                    <TimePicker Time="{Binding StartTime, Mode=TwoWay}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="End Time:" Height="Auto" Width="Auto" FontSize="15"/>
+                                    <TimePicker Time="{Binding EndTime, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Button Content="Save" Command="{x:Bind ViewModel.AddEventCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Popup>
+                </RelativePanel>
+                <GridView ItemsSource="{x:Bind ViewModel.CalendarDays}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DoubleTapped="{x:Bind ViewModel.HandleDoubleTapped}" >
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType ="models1:CalendarDay" >
-                            <RelativePanel Height="130" Width="162,5">
-                                <TextBlock Text="{x:Bind Number}"/>
-                                <ListView ItemsSource="{x:Bind Events, Mode=TwoWay}">
-                                    <DataTemplate x:DataType="models1:Event">
-                                        <StackPanel>
-                                            <TextBlock Text="{x:Bind Title}" Foreground="Green"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView>
-                            </RelativePanel>
+                        <DataTemplate x:DataType="models1:CalendarDay">
+                            <Grid Height="130" Width="162,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Date.Day}"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <ListView ItemsSource="{Binding Events, Mode=TwoWay}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate x:DataType="models1:Event">
+                                                <Border Background="Green">
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding StartTime}" Foreground="White"/>
+                                                        <TextBlock Text="{Binding Subject}" Foreground="White"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
             <Grid Grid.Row="0">
-                <RelativePanel HorizontalAlignment="Right" Margin="0,8">
-                    <Button Content="Add" Command="{x:Bind ViewModel.OpenDialogCommand}" HorizontalAlignment="Right" Height="Auto" Width="Auto"/>
-                </RelativePanel>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal" Width="120">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel Orientation="Horizontal" Width="155">
                         <Button Content="Next" Command="{x:Bind ViewModel.GoForwardCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"  />
                         <Button Content="Prev" Command="{x:Bind ViewModel.GoBackCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"/>
                     </StackPanel>
-                    <GridView ItemsSource="{x:Bind ViewModel.Months, Mode=TwoWay}">
+                </Grid>
+                <Grid Grid.Column="1">
+                    <GridView ItemsSource="{x:Bind ViewModel.Months}" Height="Auto" Width="Auto">
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="models1:CalendarMonth">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -74,18 +117,16 @@
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
-                </StackPanel>
+                </Grid>
+                <Grid Grid.Column="2">
+                </Grid>
             </Grid>
             <Grid Grid.Row="1" Margin="0,0" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="298*"/>
-                    <ColumnDefinition Width="65*"/>
-                </Grid.ColumnDefinitions>
                 <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=TwoWay}" Grid.ColumnSpan="2">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models1:DaysOfWeek">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind DayOfWeek}"  Style="{StaticResource DayOfWeeksyle}" Height="Auto" Width="162,5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding DayOfWeek}"  Style="{StaticResource DayOfWeeksyle}" Height="Auto" Width="162,5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>
