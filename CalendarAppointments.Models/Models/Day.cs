@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CalendarAppointments.Models.Models
 {
@@ -10,10 +12,5 @@ namespace CalendarAppointments.Models.Models
         public int TomorrowWeek { get; set; }
         public string Month { get; set; }
         public string TomorrowMonth { get; set; }
-
-        public Day()
-        {
-
-        }
     }
 }

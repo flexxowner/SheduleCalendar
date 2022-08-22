@@ -62,9 +62,9 @@
                         </StackPanel>
                     </Popup>
                 </RelativePanel>
-                <GridView ItemsSource="{x:Bind ViewModel.CalendarDays}" Width="Auto" SelectedItem="{x:Bind ViewModel.SelectedDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DoubleTapped="{x:Bind ViewModel.HandleDoubleTapped}" >
+                <GridView x:Name="Cell" ItemsSource="{x:Bind ViewModel.CalendarDays}" Width="{Binding ElementName=month, Path=Width}" SelectedItem="{x:Bind ViewModel.SelectedDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DoubleTapped="{x:Bind ViewModel.HandleDoubleTapped}" >
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models1:CalendarDay">
+                        <DataTemplate x:DataType="models1:MonthDay">
                             <Grid Height="130" Width="162,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.2*"/>

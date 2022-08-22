@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace CalendarAppointments.Models.Models
 {
-    public class CalendarDay
+    public class MonthDay
     {
         public DateTime Date { get; set; }
 
         private ObservableCollection<Event> events;
 
-        public CalendarDay()
+        public MonthDay()
         {
             events = new ObservableCollection<Event>();
         }

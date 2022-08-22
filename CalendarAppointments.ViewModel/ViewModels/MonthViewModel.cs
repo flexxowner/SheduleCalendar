@@ -21,7 +21,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         public RelayCommand GoBackCommand { get; set; }
         public RelayCommand GoForwardCommand { get; set; }
         public RelayCommand AddEventCommand { get; set; }
-        private CalendarDay selectedDay;
+        private MonthDay selectedDay;
         private DateTimeOffset today = DateTimeOffset.Now;
         private TimeSpan startTime;
         private TimeSpan endTime;
@@ -29,7 +29,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<string> firstDayOfWeek;
         private ObservableCollection<Event> events;
-        private ObservableCollection<CalendarDay> calendarDays;
+        private ObservableCollection<MonthDay> calendarDays;
         private int currentMonth;
         private int currentYear;
         private string eventSubject;
@@ -41,7 +41,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year}
             };
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
-            calendarDays = new ObservableCollection<CalendarDay>();
+            calendarDays = new ObservableCollection<MonthDay>();
             events = new ObservableCollection<Event>();
             CurrentMonth = today.Month;
             CurrentYear = today.Year;
@@ -84,7 +84,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             get { return daysOfWeeks; } 
             set { daysOfWeeks = value; }
         }
-        public ObservableCollection<CalendarDay> CalendarDays
+        public ObservableCollection<MonthDay> CalendarDays
         {
             get { return calendarDays; }
             set { calendarDays = value; }
@@ -95,7 +95,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             set { events = value; }
         }
 
-        public CalendarDay SelectedDay
+        public MonthDay SelectedDay
         {
             get { return selectedDay; }
             set { selectedDay = value; }
@@ -139,7 +139,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
             for (int i = 1; i < DateTime.DaysInMonth(CurrentYear, CurrentMonth) + 1; i++)
             {
-                calendarDays.Add(new CalendarDay { Date = new DateTime(CurrentYear, CurrentMonth, i) });
+                calendarDays.Add(new MonthDay { Date = new DateTime(CurrentYear, CurrentMonth, i) });
             }
         }
         private ObservableCollection<string> GetListOfWeekDays()
@@ -243,9 +243,13 @@ namespace CalendarAppointments.ViewModel.ViewModels
                 SaveToFile();
                 SaveEvent();
             }
-            else
+            else if (eventSubject == null)
             {
-                WarningDialog();
+                DialogHelper.SubjectEmptyWarning();
+            }
+            else if(EndTime <= StartTime)
+            {
+                DialogHelper.WarningDialog();
             }
         }
         private void SaveEvent()
@@ -279,16 +283,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
                     }
                 }
             }
-        }
-        private async void WarningDialog()
-        {
-            ContentDialog dialog = new ContentDialog()
-            {
-                Title = "Warning!",
-                Content = "The start time of the meeting must be earlier than the end time.",
-                CloseButtonText = "Ok"
-            };
-            await dialog.ShowAsync();
         }
         private async void SaveToFile()
         {

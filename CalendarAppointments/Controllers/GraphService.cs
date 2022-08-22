@@ -6,7 +6,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.Input;
-
+using System;
+using Helpers.Helpers;
 
 namespace CalendarAppointments.Controllers
 {
@@ -118,9 +119,9 @@ namespace CalendarAppointments.Controllers
                 GraphServiceClient graphClient = await SignInAndInitializeGraphServiceClient(scopes);
                 User GraphUser = await graphClient.Me.Request().GetAsync();
             }
-            catch (ServiceException)
+            catch(Exception e)
             {
-
+                DialogHelper.ErrorDialog(e);
             }
         }
 

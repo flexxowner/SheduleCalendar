@@ -17,7 +17,6 @@ namespace CalendarAppointments.Models.Models
         public DateTime StartDate { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-
         [XmlElement("SomeDate")]
         public string StartDateString
         {

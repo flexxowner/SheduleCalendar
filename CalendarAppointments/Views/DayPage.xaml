@@ -4,8 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:CalendarAppointments.Models.Models"
+    xmlns:vm ="using:CalendarAppointments.ViewModel.ViewModels"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:DayViewModel/>
+    </Page.DataContext>
     <Grid x:Name="ContentArea">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -76,12 +80,18 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Grid>
-                    <ListView ItemsSource="{x:Bind ViewModel.Hours}">
+                    <ListView ItemsSource="{Binding DayHours}">
                         <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                        <TextBlock Text="{Binding}" />
-                                    </StackPanel>
+                            <DataTemplate x:DataType="models:DayHours">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="{Binding HourString}"/>
+                                    </Grid>
+                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -150,12 +160,32 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Grid>
-                    <ListView ItemsSource="{x:Bind ViewModel.Hours}">
+                    <ListView ItemsSource="{Binding DayHours}">
                         <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
+                            <DataTemplate x:DataType="models:DayHours">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HourString}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <ListView ItemsSource="{Binding Events}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Event">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding StartTime}"/>
+                                                        <TextBlock Text="{Binding Subject}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
