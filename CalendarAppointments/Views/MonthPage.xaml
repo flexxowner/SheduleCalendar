@@ -81,7 +81,7 @@
                                             <DataTemplate x:DataType="models1:Event">
                                                 <Border Background="Green">
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding StartTime}" Foreground="White"/>
+                                                        <TextBlock Text="{Binding StartTimeString}" Foreground="White"/>
                                                         <TextBlock Text="{Binding Subject}" Foreground="White"/>
                                                     </StackPanel>
                                                 </Border>
@@ -111,8 +111,8 @@
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="models1:CalendarMonth">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{x:Bind Month.ToUpper()}" Height="Auto" Width="80" Style="{StaticResource DayOfWeeksyle}"/>
-                                    <TextBlock Text="{x:Bind Year, Mode=TwoWay}" Height="Auto" Width="50" Style="{StaticResource DayOfWeeksyle}" />
+                                    <TextBlock Text="{Binding MonthToUpper}" Height="Auto" Width="80" Style="{StaticResource DayOfWeeksyle}"/>
+                                    <TextBlock Text="{Binding Year, Mode=TwoWay}" Height="Auto" Width="50" Style="{StaticResource DayOfWeeksyle}" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridView.ItemTemplate>

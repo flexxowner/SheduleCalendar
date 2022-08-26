@@ -142,7 +142,7 @@
     <Compile Include="BackgroundTasks\BackgroundTask.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
-    <Compile Include="Controllers\GraphService.cs" />
+    <Compile Include="Controllers\Graph.cs" />
     <Compile Include="Controllers\DefaultRedirectUri.cs" />
     <Compile Include="Activation\ActivationService.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />

@@ -36,7 +36,6 @@ namespace Helpers.Helpers
                 object deserialized = serializer.Deserialize(stringReader);
                 value = (T)deserialized;
             }
-
             return value;
         }
     }

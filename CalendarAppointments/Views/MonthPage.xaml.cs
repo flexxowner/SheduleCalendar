@@ -1,4 +1,5 @@
 ﻿using CalendarAppointments.BackgroundTasks;
+using CalendarAppointments.Controllers;
 using CalendarAppointments.Models.Models;
 using CalendarAppointments.Services;
 using CalendarAppointments.ViewModel.ViewModels;
@@ -13,6 +14,7 @@ namespace CalendarAppointments.Views
         {
             InitializeComponent();
             DataContext = ViewModel;
+            Graph.GetEventsAsync();
             BackgroundTaskService.GetBackgroundTasksRegistration<BackgroundTask>();
         }
     }

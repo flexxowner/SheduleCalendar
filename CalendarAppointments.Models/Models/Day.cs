@@ -8,9 +8,17 @@ namespace CalendarAppointments.Models.Models
     {
         public DateTime Today { get; set; }
         public DateTime Tomorrow { get; set; }
-        public int CurrentWeek { get; set; }
-        public int TomorrowWeek { get; set; }
-        public string Month { get; set; }
-        public string TomorrowMonth { get; set; }
+        public DateTime Hour { get; set; }
+        public ObservableCollection<Event> Events { get; set; }
+
+        public Day()
+        {
+            Events = new ObservableCollection<Event>();
+        }
+
+        public string HourString
+        {
+            get { return this.Hour.ToString("HH:mm"); }
+        }
     }
 }

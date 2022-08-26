@@ -23,5 +23,10 @@ namespace CalendarAppointments.Models.Models
             get { return this.StartDate.ToString("yyyy-MM-dd HH:mm:ss"); }
             set { this.StartDate = DateTime.Parse(value); }
         }
+        [XmlIgnore]
+        public string StartTimeString
+        {
+            get { return this.StartTime.ToString(@"hh\:mm"); }
+        }
     }
 }

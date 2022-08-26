@@ -10,7 +10,10 @@ namespace CalendarAppointments.Models.Models
     {
         public int Year { get; set; }
         public string Month { get; set; }
-
+        public string MonthToUpper
+        {
+            get { return Month.ToUpper(); }
+        }
         public CalendarMonth()
         {
 

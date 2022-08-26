@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalendarAppointments.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,7 @@ namespace CalendarAppointments.BackgroundTasks
 {
     public sealed class BackgroundTaskReg : BackgroundTask
     {
-        public static DateTime UpdatedDay { get; set; }
-
-        private volatile bool _cancelRequested = false;
+        private volatile bool cancelRequested = false;
         private IBackgroundTaskInstance _taskInstance;
         private BackgroundTaskDeferral _deferral;
 
@@ -27,7 +26,7 @@ namespace CalendarAppointments.BackgroundTasks
                 {
                     Name = taskName
                 };
-                builder.SetTrigger(new TimeTrigger(15, false));
+                builder.SetTrigger(new TimeTrigger(60, false));
                 builder.AddCondition(new SystemCondition(SystemConditionType.UserPresent));
 
                 builder.Register();
@@ -46,28 +45,13 @@ namespace CalendarAppointments.BackgroundTasks
             return Task.Run(() =>
             {
                 _taskInstance = taskInstance;
-                ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(UpdateDate), TimeSpan.FromSeconds(1));
+                Graph.GetEventsAsync();
             });
         }
 
         public override void OnCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
-            _cancelRequested = true;
-
-        }
-
-        private void UpdateDate(ThreadPoolTimer timer)
-        {
-            if ((_cancelRequested == false) && (_taskInstance.Progress < 100))
-            {
-                _taskInstance.Progress += 10;
-                UpdatedDay = DateTime.Now;
-            }
-            else
-            {
-                timer.Cancel();
-                _deferral?.Complete();
-            }
+            cancelRequested = true;
         }
     }
 }

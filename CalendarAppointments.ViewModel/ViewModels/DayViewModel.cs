@@ -13,40 +13,33 @@ using Windows.Storage;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
-    public class DayViewModel : ObservableObject
+    public class DayViewModel : ObservableObject, INotifyPropertyChanged
     {
         CultureInfo myCulture = new CultureInfo("en-US");
         Calendar cal = new CultureInfo("en-US").Calendar;
         private List<DateTime> hours { get; set; }
-        private List<DateTime> minutes { get; set; }
         public RelayCommand GoBackCommand { get; set; }
         public RelayCommand GoForwardCommand { get; set; }
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<Day> days;
         private ObservableCollection<Event> events;
-        private ObservableCollection<DayHours> dayHours;
         private DateTime today = DateTime.Now;
         private DateTime tomorrow;
         private int currentWeek;
         private int tomorrowWeek;
         private string month;
         private string tomorrowMonth;
-        private int interval = 1;
         public DayViewModel()
         {
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
             events = new ObservableCollection<Event>();
             days = new ObservableCollection<Day>();
-            dayHours = new ObservableCollection<DayHours>();
+            hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
             tomorrow = today.AddDays(1);
             currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             tomorrowWeek = cal.GetWeekOfYear(today.AddDays(1), CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
             month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
             tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            days = new ObservableCollection<Day>()
-            {
-                new Day() {Today = today, Tomorrow = tomorrow, CurrentWeek = currentWeek, TomorrowWeek = tomorrowWeek, Month = month, TomorrowMonth = tomorrowMonth}
-            };
             AddHours();
             ReadFromFile();
             GoBackCommand = new RelayCommand(GoBack);
@@ -63,61 +56,103 @@ namespace CalendarAppointments.ViewModel.ViewModels
             get { return days; }
             set { days = value; }
         }
-        public ObservableCollection<DayHours> DayHours
-        {
-            get { return dayHours; }
-            set { dayHours = value; }
-        }
         public DateTime Today
         {
             get { return today; }
-            set { today = value; }
+            set {
+                today = value;
+                OnPropertyChanged();
+            }
+        }
+        public DateTime Tomorrow
+        {
+            get { return tomorrow; }
+            set 
+            { 
+                tomorrow = value;
+                OnPropertyChanged();
+            }
+        }
+        public int CurrentWeek
+        {
+            get { return currentWeek;}
+            set
+            { 
+                currentWeek = value;
+                OnPropertyChanged();
+            }
+        }
+        public int TomorrowWeek
+        {
+            get { return tomorrowWeek;}
+            set
+            { 
+                tomorrowWeek = value;
+                OnPropertyChanged();
+            }
+        }
+        public string TomorrowMonth
+        {
+            get { return tomorrowMonth;}
+            set
+            {
+                tomorrowMonth = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Month
+        {
+            get { return month; }
+            set 
+            { 
+                month = value;
+                OnPropertyChanged();
+            }
         }
         private void GoBack()
         {
-            today = today.AddDays(-1);
-            tomorrow = tomorrow.AddDays(-1);
-            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
-            tomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            Today = today.AddDays(-1);
+            Tomorrow = tomorrow.AddDays(-1);
+            Month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
+            TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            AddHours();
             ReadFromFile();
-            for (int i = 0; i < days.Count; i++)
-            {
-                days[i] = new Day() { CurrentWeek = currentWeek, Today = today, Tomorrow = tomorrow, Month = month, TomorrowMonth = tomorrowMonth, TomorrowWeek = tomorrowWeek };
-            }
         }
         private void GoForward()
         {
-            today = today.AddDays(1);
-            tomorrow = tomorrow.AddDays(1);
-            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
-            tomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            Today = today.AddDays(1);
+            Tomorrow = tomorrow.AddDays(1);
+            Month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
+            TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            AddHours();
             ReadFromFile();
-            for (int i = 0; i < days.Count; i++)
-            {
-                days[i] = new Day() { CurrentWeek = currentWeek, Today = today, Tomorrow = tomorrow, Month = month, TomorrowMonth = tomorrowMonth, TomorrowWeek = tomorrowWeek };
-            }
         }
         private void AddHours()
         {
-            hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
-            for (int i = 0; i < hours.Count; i++)
+            for (int i = 0; i < days.Count; i++)
             {
-                dayHours.Add(new DayHours() { Hour = hours[i]});
+                for (int j = 0; j < hours.Count; j++)
+                {
+                    days[i] = new Day() { Hour = hours[j], Today = Today, Tomorrow = Tomorrow };
+                }
             }
         }
         private void AddEvents()
         {
-            foreach (var item in dayHours)
+            var filter = from e in events
+                         where e.StartDate == Today || e.StartDate == Tomorrow
+                         select e;
+            foreach (var item in filter)
             {
-                foreach (var e in events)
+                foreach (var day in days)
                 {
-                    if (item.Hour.TimeOfDay == e.StartTime && (e.StartDate == today || e.StartDate == tomorrow))
+                    if (day.Hour.Hour == item.StartTime.Hours )
                     {
-                        item.Events.Add(e);
+                        day.Events.Add(item);
                     }
                 }
             }
