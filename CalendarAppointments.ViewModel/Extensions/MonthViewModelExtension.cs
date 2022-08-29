@@ -15,8 +15,7 @@ namespace CalendarAppointments.ViewModel.Extensions
     public static class MonthViewModelExtension
     {
         public static ObservableCollection<string> FirstDayOfWeek;
-        private static TimeSpan timer = new TimeSpan(0, 0, 1);
-        public static void AddDaysOfMonth(ObservableCollection<MonthDay> calendarDays, int CurrentYear, int CurrentMonth)
+        public static void AddDaysOfMonth(this ObservableCollection<MonthDay> calendarDays, int CurrentYear, int CurrentMonth)
         {
             calendarDays.Clear();
 
@@ -26,14 +25,14 @@ namespace CalendarAppointments.ViewModel.Extensions
             }
         }
 
-        public static void UpdateMonths(ObservableCollection<CalendarMonth> months, DateTimeOffset today)
+        public static void UpdateMonths(this ObservableCollection<CalendarMonth> months, DateTimeOffset today)
         {
             for (int i = 0; i < months.Count; i++)
             {
                 months[i] = new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year };
             }
         }
-        public static void AddDaysOfWeek(ObservableCollection<DaysOfWeek> daysOfWeeks, int CurrentYear, int CurrentMonth)
+        public static void AddDaysOfWeek(this ObservableCollection<DaysOfWeek> daysOfWeeks, int CurrentYear, int CurrentMonth)
         {
             daysOfWeeks.Clear();
             GetListOfWeekDays(CurrentYear, CurrentMonth);
@@ -43,7 +42,7 @@ namespace CalendarAppointments.ViewModel.Extensions
             }
         }
 
-        public static void SaveNewEvent(ObservableCollection<Event> events, MonthDay SelectedDay, ObservableCollection<MonthDay> calendarDays )
+        public static void SaveNewEvent(this ObservableCollection<Event> events, MonthDay SelectedDay, ObservableCollection<MonthDay> calendarDays )
         {
             if (events != null && SelectedDay != null)
             {
@@ -77,7 +76,7 @@ namespace CalendarAppointments.ViewModel.Extensions
             }
         }
 
-        public static async void ReadEventsFromFile(string path, ObservableCollection<MonthDay> calendarDays)
+        public static async void ReadEventsFromFile(this ObservableCollection<MonthDay> calendarDays, string path)
         {
             StorageFile localFile;
             try

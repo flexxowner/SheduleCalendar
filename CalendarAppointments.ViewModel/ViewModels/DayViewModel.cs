@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CalendarAppointments.Models.Models;
+using CalendarAppointments.ViewModel.Extensions;
 using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -17,9 +18,11 @@ namespace CalendarAppointments.ViewModel.ViewModels
     {
         CultureInfo myCulture = new CultureInfo("en-US");
         Calendar cal = new CultureInfo("en-US").Calendar;
-        private List<DateTime> hours { get; set; }
         public RelayCommand GoBackCommand { get; set; }
         public RelayCommand GoForwardCommand { get; set; }
+        private const string firstPath = "Appointments.xml";
+        private const string secondPath = "outlook.xml";
+        private List<DateTime> hours { get; set; }
         private ObservableCollection<DaysOfWeek> daysOfWeeks;
         private ObservableCollection<Day> days;
         private ObservableCollection<Event> events;
@@ -40,8 +43,9 @@ namespace CalendarAppointments.ViewModel.ViewModels
             tomorrowWeek = cal.GetWeekOfYear(today.AddDays(1), CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
             month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
             tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            AddHours();
-            ReadFromFile();
+            Days.AddHours(hours, Today, Tomorrow);
+            Days.ReadFromFile(firstPath, Today, Tomorrow);
+            Days.ReadFromFile(secondPath, Today, Tomorrow);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
@@ -117,8 +121,9 @@ namespace CalendarAppointments.ViewModel.ViewModels
             TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            AddHours();
-            ReadFromFile();
+            Days.AddHours(hours, Today, Tomorrow);
+            Days.ReadFromFile(firstPath, Today, Tomorrow);
+            Days.ReadFromFile(secondPath, Today, Tomorrow);
         }
         private void GoForward()
         {
@@ -128,62 +133,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
             TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            AddHours();
-            ReadFromFile();
+            Days.AddHours(hours, Today, Tomorrow);
+            Days.ReadFromFile(firstPath, Today, Tomorrow);
+            Days.ReadFromFile(secondPath, Today, Tomorrow);
         }
-        private void AddHours()
-        {
-            for (int i = 0; i < days.Count; i++)
-            {
-                for (int j = 0; j < hours.Count; j++)
-                {
-                    days[i] = new Day() { Hour = hours[j], Today = Today, Tomorrow = Tomorrow };
-                }
-            }
-        }
-        private void AddEvents()
-        {
-            var filter = from e in events
-                         where e.StartDate == Today || e.StartDate == Tomorrow
-                         select e;
-            foreach (var item in filter)
-            {
-                foreach (var day in days)
-                {
-                    if (day.Hour.Hour == item.StartTime.Hours )
-                    {
-                        day.Events.Add(item);
-                    }
-                }
-            }
-        }
-        private async void SaveToFile()
-        {
-            string rootFrameDataString = ObjectSerializer<ObservableCollection<Event>>.ToXml(events);
-            if (!string.IsNullOrEmpty(rootFrameDataString))
-            {
-                StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync("events.xml", CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(localFile, rootFrameDataString);
-            }
-        }
-        private async void ReadFromFile()
-        {
-            StorageFile localFile;
-            try
-            {
-                localFile = await ApplicationData.Current.LocalFolder.GetFileAsync("events.xml");
-            }
-            catch (FileNotFoundException ex)
-            {
-                localFile = null;
-            }
-            if (localFile != null)
-            {
-                string localData = await FileIO.ReadTextAsync(localFile);
 
-                events = ObjectSerializer<ObservableCollection<Event>>.FromXml(localData);
-                AddEvents();
-            }
-        }
     }
 }
