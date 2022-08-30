@@ -4,14 +4,13 @@ using System.Collections.ObjectModel;
 
 namespace CalendarAppointments.Models.Models
 {
-    public class Day
+    public class DayHour
     {
-        public DateTime Today { get; set; }
-        public DateTime Tomorrow { get; set; }
         public DateTime Hour { get; set; }
+        public DateTime Date { get; set; }
         public ObservableCollection<Event> Events { get; set; }
 
-        public Day()
+        public DayHour()
         {
             Events = new ObservableCollection<Event>();
         }

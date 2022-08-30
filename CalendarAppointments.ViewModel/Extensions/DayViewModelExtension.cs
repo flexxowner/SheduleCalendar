@@ -13,28 +13,28 @@ namespace CalendarAppointments.ViewModel.Extensions
 {
     public static class DayViewModelExtension
     {
-        public static void AddHours(this ObservableCollection<Day> days, List<DateTime> hours, DateTime Today, DateTime Tomorrow)
+        public static void AddHours(this ObservableCollection<DayHour> days, List<DateTime> hours, DateTime Today, DateTime Tomorrow)
         {
-            days.Clear();
-            for (int j = 0; j < hours.Count; j++)
+            foreach (var hour in hours)
             {
-                days.Add(new Day() { Hour = hours[j], Today = Today, Tomorrow = Tomorrow });
+                days.Add(new DayHour() { Hour = hour, Date = Today });
             }
         }
-        public static void AddEvents(this ObservableCollection<Event> events,ObservableCollection<Day> days, DateTime Today, DateTime Tomorrow)
+        public static void AddEvents(ObservableCollection<Event> events,ObservableCollection<DayHour> days, DateTime Today, DateTime Tomorrow)
         {
+            var hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
             foreach (var day in days)
             {
                 foreach (var e in events)
                 {
-                    if ((e.StartDate.Date == day.Today.Date || e.StartDate.Date == day.Tomorrow.Date) && !day.Events.Contains(e))
+                    if (e.StartTime.Hours == day.Hour.Hour && e.StartDate.Date == day.Date)
                     {
                         day.Events.Add(e);
                     }
                 }
             }
         }
-        public static async void ReadFromFile(this ObservableCollection<Day> days, string path, DateTime Today, DateTime Tomorrow)
+        public static async void ReadFromFile(this ObservableCollection<DayHour> days, string path, DateTime Today, DateTime Tomorrow)
         {
             StorageFile localFile;
             try

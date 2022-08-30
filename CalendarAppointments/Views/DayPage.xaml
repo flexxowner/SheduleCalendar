@@ -64,7 +64,7 @@
                 <Grid>
                     <ListView ItemsSource="{x:Bind ViewModel.Days}">
                         <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Day">
+                            <DataTemplate x:DataType="models:DayHour">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="0.2*"/>
@@ -74,7 +74,7 @@
                                         <TextBlock Text="{Binding HourString}"/>
                                     </Grid>
                                     <Grid Grid.Column ="1">
-                                        <ListView ItemsSource="{Binding Events}">
+                                        <ListView ItemsSource="{Binding Events, Mode=TwoWay}">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="models:Event">
                                                     <StackPanel Orientation="Horizontal">
@@ -137,7 +137,7 @@
                     <Grid>
                     <ListView ItemsSource="{x:Bind ViewModel.Days}">
                             <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Day">
+                                <DataTemplate x:DataType="models:DayHour">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="0.2*"/>

@@ -122,7 +122,7 @@
   <ItemGroup>
     <Compile Include="Models\CalendarMonth.cs" />
     <Compile Include="Models\MonthDay.cs" />
-    <Compile Include="Models\Day.cs" />
+    <Compile Include="Models\DayHour.cs" />
     <Compile Include="Models\DaysOfWeek.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Week.cs" />

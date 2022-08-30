@@ -76,7 +76,7 @@
                                     </StackPanel>
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <ListView ItemsSource="{Binding Events, Mode=TwoWay}">
+                                    <ListView ItemsSource="{Binding Events, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate x:DataType="models1:Event">
                                                 <Border Background="Green">

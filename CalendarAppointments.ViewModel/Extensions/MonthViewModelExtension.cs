@@ -75,7 +75,6 @@ namespace CalendarAppointments.ViewModel.Extensions
                 }
             }
         }
-
         public static async void ReadEventsFromFile(this ObservableCollection<MonthDay> calendarDays, string path)
         {
             StorageFile localFile;

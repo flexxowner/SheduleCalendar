@@ -9,10 +9,8 @@ namespace CalendarAppointments.Models.Models
 {
     public class Year
     {
-        public int Month { get; set; }
-        public int CurrentYear { get; set; }
+        public string Month { get; set; }
         public ObservableCollection<string> DaysOfWeek { get; set; }
-        public int Day { get; set; }
-        public ObservableCollection<Week> Weeks { get; set; }
+        public ObservableCollection<MonthDay> CalendarDays { get; set; }
     }
 }

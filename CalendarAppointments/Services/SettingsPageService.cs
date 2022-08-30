@@ -3,13 +3,20 @@ using Microsoft.Toolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel;
+using Windows.Globalization;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Services
 {
     public class SettingsPageService : ObservableObject
     {
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
+        private ICommand _switchThemeCommand;
+
+        public SettingsPageService()
+        {
+        }
 
         public ElementTheme ElementTheme
         {
@@ -17,8 +24,6 @@ namespace CalendarAppointments.Services
 
             set { SetProperty(ref _elementTheme, value); }
         }
-
-        private ICommand _switchThemeCommand;
 
         public ICommand SwitchThemeCommand
         {
@@ -37,10 +42,5 @@ namespace CalendarAppointments.Services
                 return _switchThemeCommand;
             }
         }
-
-        public SettingsPageService()
-        {
-        }
-
     }
 }
