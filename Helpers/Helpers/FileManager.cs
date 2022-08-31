@@ -9,14 +9,21 @@ namespace Helpers.Helpers
 {
     public class FileManager
     {
-        public static async void SaveToFile(ObservableCollection<Event> events, string                       path)
+        public static async void SaveToFile(string path)
+        {
+            StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(path, CreationCollisionOption.ReplaceExisting);
+        }
+        
+        public static async void SaveToExistingFile(ObservableCollection<Event> events, string path)
         {
             string rootFrameDataString = ObjectSerializer<ObservableCollection<Event>>.ToXml(events);
             if (!string.IsNullOrEmpty(rootFrameDataString))
             {
-                StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(path, CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(localFile, rootFrameDataString);
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile storageFile = await storageFolder.GetFileAsync(path);
+                await FileIO.WriteTextAsync(storageFile, rootFrameDataString);
             }
+
         }
         public static async void Delete(string path)
         {

@@ -65,7 +65,7 @@ namespace CalendarAppointments.Controllers
             }
             if (appointments != null)
             {
-                FileManager.SaveToFile(appointments,path);
+                FileManager.SaveToExistingFile(appointments,path);
             }
         }
 

@@ -127,6 +127,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Week.cs" />
     <Compile Include="Models\Year.cs" />
+    <Compile Include="Models\YearDay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\CalendarAppointments.Models.rd.xml" />
   </ItemGroup>

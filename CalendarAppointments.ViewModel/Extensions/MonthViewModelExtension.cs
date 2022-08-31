@@ -68,13 +68,14 @@ namespace CalendarAppointments.ViewModel.Extensions
             {
                 foreach (var e in events)
                 {
-                    if (e.StartDate.Date == day.Date.Date && !day.Events.Contains(e))
+                    if (e.StartDate.Date == day.Date.Date)
                     {
                         day.Events.Add(e);
                     }
                 }
             }
         }
+
         public static async void ReadEventsFromFile(this ObservableCollection<MonthDay> calendarDays, string path)
         {
             StorageFile localFile;

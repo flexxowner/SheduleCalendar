@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace CalendarAppointments.Models.Models
 {
@@ -11,6 +6,6 @@ namespace CalendarAppointments.Models.Models
     {
         public string Month { get; set; }
         public ObservableCollection<string> DaysOfWeek { get; set; }
-        public ObservableCollection<MonthDay> CalendarDays { get; set; }
+        public ObservableCollection<YearDay> CalendarDays { get; set; }
     }
 }

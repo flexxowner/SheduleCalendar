@@ -198,7 +198,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             if (EndTime > StartTime)
             {
                 events.Add(new Event() { StartTime = StartTime, EndTime = EndTime, StartDate = SelectedDay.Date, Subject = eventSubject });
-                FileManager.SaveToFile(events, firstPath);
+                FileManager.SaveToExistingFile(events, firstPath);
                 Events.SaveNewEvent(SelectedDay, calendarDays);
             }
             else if (eventSubject == null)

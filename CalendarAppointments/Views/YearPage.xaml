@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:CalendarAppointments.Models.Models" xmlns:viewmodels="using:CalendarAppointments.ViewModel.ViewModels"
     Style="{StaticResource PageStyle}"
+    Width="1460"
     mc:Ignorable="d">
     <Page.DataContext>
         <viewmodels:YearViewModel/>
@@ -16,9 +17,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <RelativePanel HorizontalAlignment="Left">
-                    <TextBlock Text="{Binding CurrentDate.Year, Mode=OneWay}" FontSize="25"/>
-                </RelativePanel>
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                    <TextBlock Text="{x:Bind ViewModel.CurrentDate.Year, Mode=OneWay}" FontSize="25"/>
+                    <Button Content="Next" Command="{x:Bind ViewModel.GoForwardCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"/>
+                    <Button Content="Prev" Command="{x:Bind ViewModel.GoBackCommand}" HorizontalAlignment="Left" Height="Auto" Width="Auto"/>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
                 <GridView ItemsSource="{x:Bind ViewModel.Years, Mode=OneWay}" Height="Auto" Width="Auto">
@@ -51,7 +54,7 @@
                                         <GridView.ItemTemplate>
                                             <DataTemplate x:DataType="models:MonthDay">
                                                 <StackPanel>
-                                                    <TextBlock Text="{Binding Date.Day}"/>
+                                                    <TextBlock Text="{Binding Date.Day}" Foreground="{Binding Color, Mode=TwoWay}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridView.ItemTemplate>

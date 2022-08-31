@@ -28,5 +28,6 @@ namespace CalendarAppointments.Models.Models
         {
             get { return this.StartTime.ToString(@"hh\:mm"); }
         }
+
     }
 }
