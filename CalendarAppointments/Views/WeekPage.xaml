@@ -12,23 +12,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
-            <GridView ItemsSource="{x:Bind ViewModel.Weeks,Mode=TwoWay}">
-                <GridView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Week">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="0.1*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{x:Bind DayOfWeek}" Height="Auto" Width="150"/>
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
         </Grid>
     </Grid>
 </Page>

@@ -3,6 +3,7 @@ using Helpers.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Windows.Storage;
@@ -27,7 +28,7 @@ namespace CalendarAppointments.ViewModel.Extensions
                     days.Add(new YearDay() { Date = new DateTime(Year, i, j) });
                 }
                 GetListOfWeekDays(Year, i);
-                years.Add(new Year() { Month = month.ToString("MMMM"), DaysOfWeek = daysOfWeek, CalendarDays = days });
+                years.Add(new Year() { Month = month.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")), DaysOfWeek = daysOfWeek, CalendarDays = days });
                 ReadEventsFromFile(path, years);
                 ReadEventsFromFile(secondPath, years);
             }

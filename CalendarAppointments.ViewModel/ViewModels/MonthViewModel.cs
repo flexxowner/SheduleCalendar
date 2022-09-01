@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CalendarAppointments.Models.Models;
@@ -37,7 +38,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             months = new ObservableCollection<CalendarMonth>()
             {
-                new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year}
+                new CalendarMonth() { Month = today.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")).ToUpper(), Year = today.Year}
             };
             daysOfWeeks = new ObservableCollection<DaysOfWeek>();
             calendarDays = new ObservableCollection<MonthDay>();

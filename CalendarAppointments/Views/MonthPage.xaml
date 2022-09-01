@@ -96,7 +96,7 @@
             </Grid>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.25*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -111,8 +111,8 @@
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="models1:CalendarMonth">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding MonthToUpper}" Height="Auto" Width="80" Style="{StaticResource DayOfWeeksyle}"/>
-                                    <TextBlock Text="{Binding Year, Mode=TwoWay}" Height="Auto" Width="50" Style="{StaticResource DayOfWeeksyle}" />
+                                    <TextBlock Text="{Binding Month, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="15"/>
+                                    <TextBlock Text="{Binding Year, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="15" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridView.ItemTemplate>
@@ -122,7 +122,7 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="1" Margin="0,0" >
-                <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=TwoWay}" Grid.ColumnSpan="2">
+                <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=OneWay}" Grid.ColumnSpan="2">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models1:DaysOfWeek">
                             <StackPanel Orientation="Horizontal">

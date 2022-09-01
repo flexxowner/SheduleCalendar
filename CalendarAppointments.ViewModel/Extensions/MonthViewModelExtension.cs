@@ -3,6 +3,7 @@ using Helpers.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,7 @@ namespace CalendarAppointments.ViewModel.Extensions
         {
             for (int i = 0; i < months.Count; i++)
             {
-                months[i] = new CalendarMonth() { Month = today.ToString("MMMM"), Year = today.Year };
+                months[i] = new CalendarMonth() { Month = today.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")).ToUpper(), Year = today.Year };
             }
         }
         public static void AddDaysOfWeek(this ObservableCollection<DaysOfWeek> daysOfWeeks, int CurrentYear, int CurrentMonth)
