@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CalendarAppointments.Models.Models
 {
-    public class DaysOfWeek
+    public class DayOfWeek
     {
-        public string DayOfWeek { get; set; }
+        public string WeekDay { get; set; }
 
-        public DaysOfWeek()
+        public DayOfWeek()
         {
 
         }

@@ -28,6 +28,15 @@ namespace CalendarAppointments.Models.Models
         {
             get { return this.StartTime.ToString(@"hh\:mm"); }
         }
-
+        [XmlIgnore]
+        public string EndTimeString
+        {
+            get { return this.EndTime.ToString(@"hh\:mm"); }
+        }
+        [XmlIgnore]
+        public string StartAndEndTimeString
+        {
+            get { return $"{StartTimeString} - {EndTimeString}"; }
+        }
     }
 }

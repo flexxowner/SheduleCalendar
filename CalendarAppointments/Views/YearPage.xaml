@@ -35,6 +35,11 @@
             </Grid>
             <Grid Grid.Row="1">
                 <GridView ItemsSource="{x:Bind ViewModel.Years, Mode=OneWay}" Height="Auto" Width="Auto">
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models:Year">
                             <Grid Height="300" Width="382">
@@ -50,6 +55,11 @@
                                 </Grid>
                                 <Grid Grid.Row="1">
                                     <GridView ItemsSource="{Binding DaysOfWeek, Mode=OneWay}">
+                                        <GridView.ItemContainerStyle>
+                                            <Style TargetType="GridViewItem">
+                                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                            </Style>
+                                        </GridView.ItemContainerStyle>
                                         <GridView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal" Width="40">
@@ -61,6 +71,11 @@
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <GridView ItemsSource="{Binding CalendarDays, Mode=OneWay}">
+                                        <GridView.ItemContainerStyle>
+                                            <Style TargetType="GridViewItem">
+                                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                            </Style>
+                                        </GridView.ItemContainerStyle>
                                         <GridView.ItemTemplate>
                                             <DataTemplate x:DataType="models:MonthDay">
                                                 <StackPanel>

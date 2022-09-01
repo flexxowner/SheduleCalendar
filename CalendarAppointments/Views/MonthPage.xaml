@@ -124,7 +124,7 @@
             <Grid Grid.Row="1" Margin="0,0" >
                 <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=OneWay}" Grid.ColumnSpan="2">
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models1:DaysOfWeek">
+                        <DataTemplate x:DataType="models1:DayOfWeek">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding DayOfWeek}"  Style="{StaticResource DayOfWeeksyle}" Height="Auto" Width="162,5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                             </StackPanel>

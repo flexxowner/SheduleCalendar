@@ -33,13 +33,13 @@ namespace CalendarAppointments.ViewModel.Extensions
                 months[i] = new CalendarMonth() { Month = today.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")).ToUpper(), Year = today.Year };
             }
         }
-        public static void AddDaysOfWeek(this ObservableCollection<DaysOfWeek> daysOfWeeks, int CurrentYear, int CurrentMonth)
+        public static void AddDaysOfWeek(this ObservableCollection<Models.Models.DayOfWeek> daysOfWeeks, int CurrentYear, int CurrentMonth)
         {
             daysOfWeeks.Clear();
             GetListOfWeekDays(CurrentYear, CurrentMonth);
             for (int i = 0; i < FirstDayOfWeek.Count; i++)
             {
-                daysOfWeeks.Add(new DaysOfWeek() { DayOfWeek = FirstDayOfWeek[i] });
+                daysOfWeeks.Add(new Models.Models.DayOfWeek() { WeekDay = FirstDayOfWeek[i] });
             }
         }
 

@@ -23,7 +23,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private const string firstPath = "Appointments.xml";
         private const string secondPath = "outlook.xml";
         private List<DateTime> hours { get; set; }
-        private ObservableCollection<DaysOfWeek> daysOfWeeks;
+        private ObservableCollection<Models.Models.DayOfWeek> daysOfWeeks;
         private ObservableCollection<DayHour> days;
         private ObservableCollection<Event> events;
         private DateTime today = DateTime.Now;
@@ -34,7 +34,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private string tomorrowMonth;
         public DayViewModel()
         {
-            daysOfWeeks = new ObservableCollection<DaysOfWeek>();
+            daysOfWeeks = new ObservableCollection<Models.Models.DayOfWeek>();
             events = new ObservableCollection<Event>();
             days = new ObservableCollection<DayHour>();
             hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
@@ -50,7 +50,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             GoForwardCommand = new RelayCommand(GoForward);
         }
 
-        public ObservableCollection<DaysOfWeek> DaysOfWeeks
+        public ObservableCollection<Models.Models.DayOfWeek> DaysOfWeeks
         {
             get { return daysOfWeeks; }
             set { daysOfWeeks = value; }

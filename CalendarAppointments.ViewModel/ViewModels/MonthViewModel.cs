@@ -26,7 +26,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private TimeSpan startTime;
         private TimeSpan endTime;
         private ObservableCollection<CalendarMonth> months;
-        private ObservableCollection<DaysOfWeek> daysOfWeeks;
+        private ObservableCollection<Models.Models.DayOfWeek> daysOfWeeks;
         private ObservableCollection<Event> events;
         private ObservableCollection<MonthDay> calendarDays;
         private int currentMonth;
@@ -40,7 +40,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             {
                 new CalendarMonth() { Month = today.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")).ToUpper(), Year = today.Year}
             };
-            daysOfWeeks = new ObservableCollection<DaysOfWeek>();
+            daysOfWeeks = new ObservableCollection<Models.Models.DayOfWeek>();
             calendarDays = new ObservableCollection<MonthDay>();
             events = new ObservableCollection<Event>();
             CurrentMonth = today.Month;
@@ -84,7 +84,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             set { months = value; }
         }
 
-        public ObservableCollection<DaysOfWeek> DaysOfWeeks
+        public ObservableCollection<Models.Models.DayOfWeek> DaysOfWeeks
         { 
             get { return daysOfWeeks; } 
             set { daysOfWeeks = value; }
