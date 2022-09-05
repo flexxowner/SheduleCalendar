@@ -9,7 +9,7 @@ namespace Helpers.Helpers
 {
     public class FileManager
     {
-        public static async void SaveToFile(string path)
+        public static async void CreateFile(string path)
         {
             StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(path, CreationCollisionOption.OpenIfExists);
         }
