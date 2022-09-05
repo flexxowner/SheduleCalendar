@@ -18,7 +18,7 @@ namespace CalendarAppointments.Models.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         [XmlElement("SomeDate")]
-        public string StartDateString
+        public string SerializableDate
         {
             get { return this.StartDate.ToString("yyyy-MM-dd HH:mm:ss"); }
             set { this.StartDate = DateTime.Parse(value); }
@@ -37,6 +37,11 @@ namespace CalendarAppointments.Models.Models
         public string StartAndEndTimeString
         {
             get { return $"{StartTimeString} - {EndTimeString}"; }
+        }
+        [XmlIgnore]
+        public string StringDate
+        {
+            get { return this.StartDate.ToString("ddd, dd MMM"); }
         }
     }
 }

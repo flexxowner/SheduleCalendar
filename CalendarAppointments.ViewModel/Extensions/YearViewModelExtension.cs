@@ -16,6 +16,7 @@ namespace CalendarAppointments.ViewModel.Extensions
     {
         private static ObservableCollection<string> daysOfWeek;
         private static Brush greenColor = new SolidColorBrush(Colors.Green);
+        private static Brush redColor = new SolidColorBrush(Colors.Red);
 
         public static void AddDays(this ObservableCollection<Year> years, int Year, string path, string secondPath)
         {
@@ -26,6 +27,7 @@ namespace CalendarAppointments.ViewModel.Extensions
                 for (int j = 1; j < DateTime.DaysInMonth(Year, month.Month) + 1; j++)
                 {
                     days.Add(new YearDay() { Date = new DateTime(Year, i, j) });
+                    AddColorForToday(days);
                 }
                 GetListOfWeekDays(Year, i);
                 years.Add(new Year() { Month = month.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")), DaysOfWeek = daysOfWeek, CalendarDays = days });
@@ -77,6 +79,18 @@ namespace CalendarAppointments.ViewModel.Extensions
                 item.Color = greenColor;
             }
         }
+
+        private static void AddColorForToday(ObservableCollection<YearDay> days)
+        {
+            foreach (var item in days)
+            {
+                if (item.Date.Date == DateTime.Today.Date)
+                {
+                    item.Color = redColor;
+                }
+            }
+        }
+
         public static async void ReadEventsFromFile(string path, ObservableCollection<Year> years)
         {
             StorageFile localFile;

@@ -56,7 +56,7 @@ namespace CalendarAppointments.Controllers
                 {
                     var startDate = DateTime.Parse(item.Start.DateTime);
                     var endDate = DateTime.Parse(item.End.DateTime);
-                    appointments.Add(new Models.Models.Event() { Subject = item.Subject, StartDateString = item.Start.DateTime, StartTime = startDate.ToLocalTime().TimeOfDay, EndTime = endDate.ToLocalTime().TimeOfDay });
+                    appointments.Add(new Models.Models.Event() { Subject = item.Subject, SerializableDate = item.Start.DateTime, StartTime = startDate.ToLocalTime().TimeOfDay, EndTime = endDate.ToLocalTime().TimeOfDay });
                 }
             }
             catch (Exception e)

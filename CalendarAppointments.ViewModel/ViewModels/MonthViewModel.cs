@@ -164,10 +164,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
             MonthViewModelExtension.FirstDayOfWeek.Clear();
             DaysOfWeeks.AddDaysOfWeek(CurrentYear, CurrentMonth);
             CalendarDays.AddDaysOfMonth(CurrentYear, CurrentMonth);
-            CalendarDays.ReadEventsFromFile(firstPath);
-            CalendarDays.ReadEventsFromFile(secondPath);
             today = new DateTime(CurrentYear, CurrentMonth, 1);
             Months.UpdateMonths(Today);
+            CalendarDays.ReadEventsFromFile(firstPath);
+            CalendarDays.ReadEventsFromFile(secondPath);
         }
 
         private void GoForward()
@@ -188,10 +188,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
             MonthViewModelExtension.FirstDayOfWeek.Clear();
             DaysOfWeeks.AddDaysOfWeek(CurrentYear, CurrentMonth);
             CalendarDays.AddDaysOfMonth(CurrentYear, CurrentMonth);
-            CalendarDays.ReadEventsFromFile(firstPath);
-            CalendarDays.ReadEventsFromFile(secondPath);
             today = new DateTime(CurrentYear, CurrentMonth, 1);
             Months.UpdateMonths(Today);
+            CalendarDays.ReadEventsFromFile(firstPath);
+            CalendarDays.ReadEventsFromFile(secondPath);
         }
 
         private void AddEventToSelectedDay()

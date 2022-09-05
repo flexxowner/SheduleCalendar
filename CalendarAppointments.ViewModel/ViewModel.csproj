@@ -123,6 +123,7 @@
     <Compile Include="Extensions\DayViewModelExtension.cs" />
     <Compile Include="Extensions\ListViewModelExtension.cs" />
     <Compile Include="Extensions\MonthViewModelExtension.cs" />
+    <Compile Include="Extensions\SearchViewModelExtension.cs" />
     <Compile Include="Extensions\YearViewModelExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DayViewModel.cs" />

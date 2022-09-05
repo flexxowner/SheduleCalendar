@@ -11,7 +11,7 @@ namespace Helpers.Helpers
     {
         public static async void SaveToFile(string path)
         {
-            StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(path, CreationCollisionOption.ReplaceExisting);
+            StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(path, CreationCollisionOption.OpenIfExists);
         }
         
         public static async void SaveToExistingFile(ObservableCollection<Event> events, string path)

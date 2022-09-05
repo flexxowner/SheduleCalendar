@@ -77,9 +77,9 @@
                                             </Style>
                                         </GridView.ItemContainerStyle>
                                         <GridView.ItemTemplate>
-                                            <DataTemplate x:DataType="models:MonthDay">
+                                            <DataTemplate x:DataType="models:YearDay">
                                                 <StackPanel>
-                                                    <TextBlock Text="{Binding Date.Day}" Foreground="{Binding Color, Mode=TwoWay}"/>
+                                                    <TextBlock Text="{Binding Date.Day}" Foreground="{Binding Color, Mode=OneWay}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridView.ItemTemplate>

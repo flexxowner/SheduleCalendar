@@ -51,7 +51,7 @@ namespace CalendarAppointments.ViewModel.Extensions
                                  where day.Date == SelectedDay.Date
                                  select day;
                 var filterEvents = from e in events
-                                   where e.StartDate == SelectedDay.Date && !SelectedDay.Events.Contains(e)
+                                   where e.StartDate == SelectedDay.Date
                                    select e;
                 foreach (var day in filterDays)
                 {
