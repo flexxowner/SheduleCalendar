@@ -45,13 +45,13 @@ namespace CalendarAppointments.ViewModel.Extensions
 
         public static void SaveNewEvent(this ObservableCollection<Event> events, MonthDay SelectedDay, ObservableCollection<MonthDay> calendarDays )
         {
-            if (events != null && SelectedDay != null)
+            try
             {
                 var filterDays = from day in calendarDays
                                  where day.Date == SelectedDay.Date
                                  select day;
                 var filterEvents = from e in events
-                                   where e.StartDate == SelectedDay.Date
+                                   where e.StartDate == SelectedDay.Date && !SelectedDay.Events.Contains(e)
                                    select e;
                 foreach (var day in filterDays)
                 {
@@ -60,6 +60,10 @@ namespace CalendarAppointments.ViewModel.Extensions
                         day.Events.Add(e);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                DialogHelper.ErrorDialog(e);
             }
         }
 
