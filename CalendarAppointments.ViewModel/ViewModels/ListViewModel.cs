@@ -1,65 +1,69 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using CalendarAppointments.Models.Models;
-using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using CalendarAppointments.ViewModel.Service;
+using System.ComponentModel;
+using CalendarAppointments.ViewModel.Services;
 using CalendarAppointments.ViewModel.Extensions;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
-    public class ListViewModel : ObservableObject
+    public class ListViewModel : ObservableObject, INotifyPropertyChanged
     {
-        public RelayCommand GoBackCommand { get; set; }
-        public RelayCommand GoForwardCommand { get; set; }
-        private DateTime currentDate;
-        private int year;
-        private ObservableCollection<ListModel> dates;
         private const string firstPath = "Appointments.xml";
         private const string secondPath = "outlook.xml";
+        private const int min = 1;
+        private readonly ObservableCollection<ListModel> dates;
+        private DateTime currentDate;
+        private int year;
+
         public ListViewModel()
         {
             currentDate = DateTime.Today;
             year = currentDate.Year;
             dates = new ObservableCollection<ListModel>();
-            Dates.AddDates(year, firstPath, secondPath);
+            dates.AddDates(year, firstPath, secondPath);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
 
+        public RelayCommand GoBackCommand { get; set; }
+
+        public RelayCommand GoForwardCommand { get; set; }
+
         public DateTime CurrentDate
         {
-            get { return currentDate; }
+            get => currentDate;
             set
             { 
                 currentDate = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentDate));
             }
         }
 
         public ObservableCollection<ListModel> Dates
         {
-            get { return dates; }
-            set { dates = value; }
+            get => dates;
         }
 
         public int Year
         {
-            get { return year; }
+            get => year;
             set { year = value; }
         }
 
         private void GoBack()
         {
-            CurrentDate = new DateTime(CurrentDate.Year - 1, 1, 1);
+            CurrentDate = DataChanger.ChangeDateBack(CurrentDate, min);
             dates.Clear();
             Dates.AddDates(year, firstPath, secondPath);
         }
 
         private void GoForward()
         {
-            CurrentDate = new DateTime(CurrentDate.Year + 1, 1, 1);
+            CurrentDate = DataChanger.ChangeDateForward(CurrentDate, min);
             dates.Clear();
             Dates.AddDates(year, firstPath, secondPath);
         }

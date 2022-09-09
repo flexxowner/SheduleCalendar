@@ -1,34 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using CalendarAppointments.Models.Models;
 using CalendarAppointments.ViewModel.Extensions;
-using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Windows.Storage;
+using DayOfWeek = CalendarAppointments.Models.Models.DayOfWeek;
 using Windows.UI.Xaml.Input;
+using CalendarAppointments.ViewModel.Service;
+using System.ComponentModel;
+using CalendarAppointments.ViewModel.Services;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
-    public class MonthViewModel : ObservableObject
+    public class MonthViewModel : ObservableObject, INotifyPropertyChanged
     {
-        public RelayCommand GoBackCommand { get; set; }
-        public RelayCommand GoForwardCommand { get; set; }
-        public RelayCommand AddEventCommand { get; set; }
-        private const string firstPath = "Appointments.xml";
-        private const string secondPath = "outlook.xml";
+        private const string FirstPath = "Appointments.xml";
+        private const string SecondPath = "outlook.xml";
+        private const string Format = "MMMM";
+        private const int Max = 12;
+        private const int Min = 1;
+        private const string Culture = "en";
+        private readonly ObservableCollection<DayOfWeek> daysOfWeeks;
+        private readonly ObservableCollection<Event> events;
+        private readonly ObservableCollection<MonthDay> calendarDays;
+        private readonly ObservableCollection<CalendarMonth> months;
         private MonthDay selectedDay;
         private DateTimeOffset today = DateTimeOffset.Now;
         private TimeSpan startTime;
         private TimeSpan endTime;
-        private ObservableCollection<CalendarMonth> months;
-        private ObservableCollection<Models.Models.DayOfWeek> daysOfWeeks;
-        private ObservableCollection<Event> events;
-        private ObservableCollection<MonthDay> calendarDays;
         private int currentMonth;
         private int currentYear;
         private string eventSubject;
@@ -38,17 +38,17 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             months = new ObservableCollection<CalendarMonth>()
             {
-                new CalendarMonth() { Month = today.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")).ToUpper(), Year = today.Year}
+                new CalendarMonth() { Month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture)).ToUpper(), Year = today.Year}
             };
-            daysOfWeeks = new ObservableCollection<Models.Models.DayOfWeek>();
+            daysOfWeeks = new ObservableCollection<DayOfWeek>();
             calendarDays = new ObservableCollection<MonthDay>();
             events = new ObservableCollection<Event>();
             CurrentMonth = today.Month;
             CurrentYear = today.Year;
             CalendarDays.AddDaysOfMonth(CurrentYear, CurrentMonth);
             DaysOfWeeks.AddDaysOfWeek(CurrentYear, CurrentMonth);
-            CalendarDays.ReadEventsFromFile(firstPath);
-            CalendarDays.ReadEventsFromFile(secondPath);
+            EventService.ReadEventsFromFile(FirstPath, CalendarDays);
+            EventService.ReadEventsFromFile(SecondPath, CalendarDays);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
             AddEventCommand = new RelayCommand(AddEventToSelectedDay);
@@ -60,156 +60,124 @@ namespace CalendarAppointments.ViewModel.ViewModels
             isOpen = false;
         }
 
+        public RelayCommand GoBackCommand { get; set; }
+
+        public RelayCommand GoForwardCommand { get; set; }
+
+        public RelayCommand AddEventCommand { get; set; }
+
         public DateTimeOffset Today
         {
-            get { return today; }
+            get => today;
             set { SetProperty(ref today, value); }
         }
 
         public int CurrentMonth
         {
-            get { return currentMonth; }
+            get => currentMonth;
             set { currentMonth = value; }
         }
 
         public int CurrentYear
         {
-            get { return currentYear; }
+            get => currentYear;
             set { currentYear = value; }
         }
 
         public ObservableCollection<CalendarMonth> Months
         {
-            get { return months; }
-            set { months = value; }
+            get => months;
         }
 
-        public ObservableCollection<Models.Models.DayOfWeek> DaysOfWeeks
-        { 
-            get { return daysOfWeeks; } 
-            set { daysOfWeeks = value; }
+        public ObservableCollection<DayOfWeek> DaysOfWeeks
+        {
+            get => daysOfWeeks;
         }
 
         public ObservableCollection<MonthDay> CalendarDays
         {
-            get { return calendarDays; }
-            set { calendarDays = value; }
+            get => calendarDays;
         }
 
         public ObservableCollection<Event> Events
         {
-            get { return events; }
-            set { events = value; }
+            get => events;
         }
 
         public MonthDay SelectedDay
         {
-            get { return selectedDay; }
+            get => selectedDay;
             set { selectedDay = value; }
         }
 
         public string EventSubject
         {
-            get { return eventSubject; }
-            set { eventSubject = value; }
+            get => eventSubject;
+            set
+            {
+                eventSubject = value;
+                OnPropertyChanged(nameof(EventSubject));
+            }
         }
 
         public TimeSpan StartTime
         {
-            get { return startTime; }
+            get => startTime;
             set
-            { 
+            {
                 startTime = value;
-                OnPropertyChanged("StartTime");
+                OnPropertyChanged(nameof(StartTime));
             }
         }
 
         public TimeSpan EndTime
         {
-            get { return endTime; }
+            get => endTime;
             set
-            { 
+            {
                 endTime = value;
-                OnPropertyChanged("EndTime");
+                OnPropertyChanged(nameof(EndTime));
             }
         }
 
         public bool IsOpen
         {
-            get { return isOpen; }
+            get => isOpen;
             set
             {
                 if (isOpen == value) return;
                 isOpen = value;
-                OnPropertyChanged("IsOpen");
+                OnPropertyChanged(nameof(IsOpen));
             }
         }
 
-
         private void GoBack()
         {
-            CurrentMonth = CurrentMonth - 1;
-
-            if (CurrentMonth > 12)
-            {
-                CurrentYear = CurrentYear + 1;
-                CurrentMonth = 1;
-            }
-            else if (CurrentMonth < 1)
-            {
-                CurrentYear = CurrentYear - 1;
-                CurrentMonth = 12;
-            }
-
-            MonthViewModelExtension.FirstDayOfWeek.Clear();
+            DataChanger.ChangeMonthBack(ref currentMonth, Max, Min, ref currentYear);
+            DaysOfWeeks.Clear();
             DaysOfWeeks.AddDaysOfWeek(CurrentYear, CurrentMonth);
             CalendarDays.AddDaysOfMonth(CurrentYear, CurrentMonth);
-            today = new DateTime(CurrentYear, CurrentMonth, 1);
-            Months.UpdateMonths(Today);
-            CalendarDays.ReadEventsFromFile(firstPath);
-            CalendarDays.ReadEventsFromFile(secondPath);
+            Today = new DateTime(CurrentYear, CurrentMonth, Min);
+            Months.UpdateMonths(Today, Format, Culture);
+            EventService.ReadEventsFromFile(FirstPath, CalendarDays);
+            EventService.ReadEventsFromFile(SecondPath, CalendarDays);
         }
 
         private void GoForward()
         {
-            CurrentMonth = CurrentMonth + 1;
-
-            if (CurrentMonth > 12)
-            {
-                CurrentYear = CurrentYear + 1;
-                CurrentMonth = 1;
-            }
-            else if (CurrentMonth < 1)
-            {
-                CurrentYear = CurrentYear - 1;
-                CurrentMonth = 12;
-            }
-
-            MonthViewModelExtension.FirstDayOfWeek.Clear();
+            DataChanger.ChangeMonthForward(ref currentMonth, Max, Min, ref currentYear);
+            DaysOfWeeks.Clear();
             DaysOfWeeks.AddDaysOfWeek(CurrentYear, CurrentMonth);
             CalendarDays.AddDaysOfMonth(CurrentYear, CurrentMonth);
-            today = new DateTime(CurrentYear, CurrentMonth, 1);
-            Months.UpdateMonths(Today);
-            CalendarDays.ReadEventsFromFile(firstPath);
-            CalendarDays.ReadEventsFromFile(secondPath);
+            Today = new DateTime(CurrentYear, CurrentMonth, Min);
+            Months.UpdateMonths(Today, Format, Culture);
+            EventService.ReadEventsFromFile(FirstPath, CalendarDays);
+            EventService.ReadEventsFromFile(SecondPath, CalendarDays);
         }
 
         private void AddEventToSelectedDay()
         {
-            if (EndTime > StartTime)
-            {
-                events.Add(new Event() { StartTime = StartTime, EndTime = EndTime, StartDate = SelectedDay.Date, Subject = eventSubject });
-                FileManager.SaveToExistingFile(events, firstPath);
-                Events.SaveNewEvent(SelectedDay, calendarDays);
-            }
-            else if (eventSubject == null)
-            {
-                DialogHelper.SubjectEmptyWarning();
-            }
-            else if(EndTime <= StartTime)
-            {
-                DialogHelper.WarningDialog();
-            }
+            EventService.AddEventToSelectedDay(Events, CalendarDays, StartTime, EndTime, EventSubject, SelectedDay, FirstPath);
         }
     }
 }

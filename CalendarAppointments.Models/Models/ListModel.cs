@@ -10,11 +10,20 @@ namespace CalendarAppointments.Models.Models
 {
     public class ListModel
     {
-        public DateTime Date { get; set; }
+        private const string Culture = "en";
+        private const string Format = "MMMM";
+
+        public ListModel()
+        {
+        }
+
         public ObservableCollection<MonthDay> Dates { get; set; }
+
+        public DateTime Date { get; set; }
+
         public string DateToString
         {
-            get { return Date.ToString("MMMM", CultureInfo.CreateSpecificCulture("en")); }
+            get => Date.ToString(Format, CultureInfo.CreateSpecificCulture(Culture));
         }
     }
 }

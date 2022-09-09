@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CalendarAppointments.Behaviors;
 using CalendarAppointments.Views;
 using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -20,7 +19,6 @@ namespace CalendarAppointments.Services
     {
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
         private readonly KeyboardAccelerator _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
-
         private bool _isBackEnabled;
         private IList<KeyboardAccelerator> _keyboardAccelerators;
         private WinUI.NavigationView _navigationView;
@@ -28,41 +26,9 @@ namespace CalendarAppointments.Services
         private ICommand _loadedCommand;
         private ICommand _itemInvokedCommand;
 
-        public bool IsBackEnabled
-        {
-            get { return _isBackEnabled; }
-            set { SetProperty(ref _isBackEnabled, value); }
-        }
-
-        public WinUI.NavigationViewItem Selected
-        {
-            get { return _selected; }
-            set { SetProperty(ref _selected, value); }
-        }
-
-        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
-
-        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked));
-
         public ShellService()
         {
-        }
 
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView, IList<KeyboardAccelerator> keyboardAccelerators)
-        {
-            _navigationView = navigationView;
-            _keyboardAccelerators = keyboardAccelerators;
-            NavigationService.Frame = frame;
-            NavigationService.NavigationFailed += Frame_NavigationFailed;
-            NavigationService.Navigated += Frame_Navigated;
-            _navigationView.BackRequested += OnBackRequested;
-        }
-
-        private async void OnLoaded()
-        {
-            _keyboardAccelerators.Add(_altLeftKeyboardAccelerator);
-            _keyboardAccelerators.Add(_backKeyboardAccelerator);
-            await Task.CompletedTask;
         }
 
         private void OnItemInvoked(WinUI.NavigationViewItemInvokedEventArgs args)
@@ -109,6 +75,46 @@ namespace CalendarAppointments.Services
             }
         }
 
+        private static void OnKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            var result = NavigationService.GoBack();
+            args.Handled = result;
+        }
+
+        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
+
+        public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked));
+
+        public bool IsBackEnabled
+        {
+            get { return _isBackEnabled; }
+            set { SetProperty(ref _isBackEnabled, value); }
+        }
+
+        public WinUI.NavigationViewItem Selected
+        {
+            get { return _selected; }
+            set { SetProperty(ref _selected, value); }
+        }
+
+
+        public void Initialize(Frame frame, WinUI.NavigationView navigationView, IList<KeyboardAccelerator> keyboardAccelerators)
+        {
+            _navigationView = navigationView;
+            _keyboardAccelerators = keyboardAccelerators;
+            NavigationService.Frame = frame;
+            NavigationService.NavigationFailed += Frame_NavigationFailed;
+            NavigationService.Navigated += Frame_Navigated;
+            _navigationView.BackRequested += OnBackRequested;
+        }
+
+        private async void OnLoaded()
+        {
+            _keyboardAccelerators.Add(_altLeftKeyboardAccelerator);
+            _keyboardAccelerators.Add(_backKeyboardAccelerator);
+            await Task.CompletedTask;
+        }
+
         private WinUI.NavigationViewItem GetSelectedItem(IEnumerable<object> menuItems, Type pageType)
         {
             foreach (var item in menuItems.OfType<WinUI.NavigationViewItem>())
@@ -145,13 +151,5 @@ namespace CalendarAppointments.Services
             keyboardAccelerator.Invoked += OnKeyboardAcceleratorInvoked;
             return keyboardAccelerator;
         }
-
-        private static void OnKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-        {
-            var result = NavigationService.GoBack();
-            args.Handled = result;
-        }
-
-
     }
 }

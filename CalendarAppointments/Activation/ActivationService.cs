@@ -14,7 +14,6 @@ namespace CalendarAppointments.Activation
         private readonly App _app;
         private readonly Type _defaultNavItem;
         private Lazy<UIElement> _shell;
-
         private object _lastActivationArgs;
 
         public ActivationService(App app, Type defaultNavItem, Lazy<UIElement> shell = null)

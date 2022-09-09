@@ -1,23 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CalendarAppointments.Models.Models
 {
     public class DayHour
     {
-        public DateTime Hour { get; set; }
-        public DateTime Date { get; set; }
-        public ObservableCollection<Event> Events { get; set; }
+        private readonly ObservableCollection<Event> events;
 
         public DayHour()
         {
-            Events = new ObservableCollection<Event>();
+            events = new ObservableCollection<Event>();
         }
+        public DateTime Hour { get; set; }
+
+        public DateTime Date { get; set; }
 
         public string HourString
         {
-            get { return this.Hour.ToString("HH:mm"); }
+            get => this.Hour.ToString("HH:mm");
+        }
+
+        public ObservableCollection<Event> Events
+        {
+            get => events;
         }
     }
 }

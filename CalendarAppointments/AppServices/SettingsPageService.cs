@@ -1,11 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.ApplicationModel;
-using Windows.Globalization;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Services
 {
@@ -20,7 +16,7 @@ namespace CalendarAppointments.Services
 
         public ElementTheme ElementTheme
         {
-            get { return _elementTheme; }
+            get => _elementTheme;
 
             set { SetProperty(ref _elementTheme, value); }
         }

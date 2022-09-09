@@ -13,35 +13,43 @@ namespace CalendarAppointments.Models.Models
     public class Event 
     {
         public string Subject { get; set; }
+
         [XmlIgnore]
         public DateTime StartDate { get; set; }
+
         public TimeSpan StartTime { get; set; }
+
         public TimeSpan EndTime { get; set; }
+
         [XmlElement("SomeDate")]
         public string SerializableDate
         {
-            get { return this.StartDate.ToString("yyyy-MM-dd HH:mm:ss"); }
+            get => this.StartDate.ToString("yyyy-MM-dd HH:mm:ss");
             set { this.StartDate = DateTime.Parse(value); }
         }
+
         [XmlIgnore]
         public string StartTimeString
         {
-            get { return this.StartTime.ToString(@"hh\:mm"); }
+            get => this.StartTime.ToString(@"hh\:mm");
         }
+
         [XmlIgnore]
         public string EndTimeString
         {
-            get { return this.EndTime.ToString(@"hh\:mm"); }
+            get => this.EndTime.ToString(@"hh\:mm");
         }
+
         [XmlIgnore]
         public string StartAndEndTimeString
         {
-            get { return $"{StartTimeString} - {EndTimeString}"; }
+            get => $"{StartTimeString} - {EndTimeString}";
         }
+
         [XmlIgnore]
         public string StringDate
         {
-            get { return this.StartDate.ToString("ddd, dd MMM"); }
+            get => this.StartDate.ToString("ddd, dd MMM");
         }
     }
 }

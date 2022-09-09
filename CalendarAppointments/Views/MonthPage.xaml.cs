@@ -14,7 +14,6 @@ namespace CalendarAppointments.Views
         {
             InitializeComponent();
             DataContext = ViewModel;
-            Graph.GetEventsAsync();
             BackgroundTaskService.GetBackgroundTasksRegistration<BackgroundTask>();
         }
     }

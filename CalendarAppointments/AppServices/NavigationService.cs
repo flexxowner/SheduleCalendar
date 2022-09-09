@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -13,6 +12,10 @@ namespace CalendarAppointments.Services
         public static event NavigationFailedEventHandler NavigationFailed;
         private static Frame frame;
         private static object lastParamUsed;
+
+        private static void Frame_NavigationFailed(object sender, NavigationFailedEventArgs e) => NavigationFailed?.Invoke(sender, e);
+
+        private static void Frame_Navigated(object sender, NavigationEventArgs e) => Navigated?.Invoke(sender, e);
 
         public static Frame Frame
         {
@@ -96,9 +99,5 @@ namespace CalendarAppointments.Services
                 frame.NavigationFailed -= Frame_NavigationFailed;
             }
         }
-
-        private static void Frame_NavigationFailed(object sender, NavigationFailedEventArgs e) => NavigationFailed?.Invoke(sender, e);
-
-        private static void Frame_Navigated(object sender, NavigationEventArgs e) => Navigated?.Invoke(sender, e);
     }
 }

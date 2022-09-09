@@ -1,4 +1,5 @@
 ﻿using CalendarAppointments.Models.Models;
+using CalendarAppointments.ViewModel.Service;
 using Helpers.Helpers;
 using System;
 using System.Collections.Generic;
@@ -13,43 +14,16 @@ namespace CalendarAppointments.ViewModel.Extensions
 {
     public static class SearchViewModelExtension
     {
-        public static void SearchEvent(this ObservableCollection<Event> FoundEvents, string Title, ObservableCollection<Event> events)
+        public static void SearchEvent(
+            this ObservableCollection<Event> FoundEvents, string Title, ObservableCollection<Event> events)
         {
-            if (Title != "")
-            {
-                var _events = events.Where(x => x.Subject.Contains(Title));
-                foreach (var item in _events)
-                {
-                    if (item != null)
-                    {
-                        FoundEvents.Add(item);
-                    }
-                }
-            }
+            EventService.SearchEvent(FoundEvents, Title, events);
         }
 
-        public static async void ReadEventsFromFile(this ObservableCollection<Event> Events, string path)
+        public static void ReadEventsFromFile(
+            this ObservableCollection<Event> Events, string path)
         {
-            StorageFile localFile;
-            try
-            {
-                localFile = await ApplicationData.Current.LocalFolder.GetFileAsync(path);
-            }
-            catch (FileNotFoundException ex)
-            {
-                localFile = null;
-            }
-            if (localFile != null)
-            {
-                string localData = await FileIO.ReadTextAsync(localFile);
-
-                var events = ObjectSerializer<ObservableCollection<Event>>.FromXml(localData);
-
-                foreach (var item in events)
-                {
-                    Events.Add(item);
-                }
-            }
+            EventService.ReadEventsFromFile(path, Events);
         }
     }
 }

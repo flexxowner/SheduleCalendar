@@ -28,7 +28,6 @@ namespace CalendarAppointments.Activation
 
         protected override bool CanHandleInternal(IActivatedEventArgs args)
         {
-            // None of the ActivationHandlers has handled the app activation
             return NavigationService.Frame.Content == null && _navElement != null;
         }
     }

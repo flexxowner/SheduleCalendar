@@ -9,9 +9,11 @@
     xmlns:helpers="using:Helpers.Helpers"
     xmlns:views="using:CalendarAppointments.Views"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:i="using:Microsoft.Xaml.Interactivity" xmlns:controllers="using:CalendarAppointments.Controllers"
     mc:Ignorable="d">
-
+    <Page.DataContext>
+        <controllers:Graph/>
+    </Page.DataContext>
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
             <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
@@ -34,10 +36,24 @@
             <winui:NavigationViewItem x:Uid="Shell_List" Icon="List" helpers:NavHelper.NavigateTo="views:ListPage" />
         </winui:NavigationView.MenuItems>
         <winui:NavigationView.Header>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="SignIn" Content="Sign In" HorizontalAlignment="Right" Padding="5" Command="{Binding CallGraphCommand, Mode=TwoWay}" Margin="5" FontFamily="Segoe Ui"/>
-                <Button x:Name="SignOut" Content="Sign Out" HorizontalAlignment="Right" Command="{Binding SignOutCommand, Mode=TwoWay}"/>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button x:Name="SignIn" Content="Sign In" HorizontalAlignment="Right" Padding="5" Visibility="Visible" Command="{Binding CallGraphCommand, Mode=TwoWay}" Margin="5" FontFamily="Segoe Ui"/>
+                        <Button x:Name="SignOut" Content="Sign Out" HorizontalAlignment="Right" Visibility="{Binding Visibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SignOutCommand, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding UserName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12"/>
+                        <TextBlock Text="{Binding TokenExpires, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </winui:NavigationView.Header>
         <i:Interaction.Behaviors>
             <ic:EventTriggerBehavior EventName="ItemInvoked">

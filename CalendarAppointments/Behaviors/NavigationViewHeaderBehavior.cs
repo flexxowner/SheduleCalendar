@@ -1,11 +1,8 @@
 ﻿using CalendarAppointments.Services;
-
 using Microsoft.Xaml.Interactivity;
-
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace CalendarAppointments.Behaviors
@@ -21,10 +18,23 @@ namespace CalendarAppointments.Behaviors
         public static readonly DependencyProperty HeaderModeProperty =
             DependencyProperty.RegisterAttached("HeaderMode", typeof(bool), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(NavigationViewHeaderMode.Always, (d, e) => _current.UpdateHeader()));
 
-        public DataTemplate DefaultHeaderTemplate { get; set; }
         public static readonly DependencyProperty DefaultHeaderProperty = DependencyProperty.Register("DefaultHeader", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
         private static NavigationViewHeaderBehavior _current;
         private Page _currentPage;
+
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            var frame = sender as Frame;
+            if (frame.Content is Page page)
+            {
+                _currentPage = page;
+
+                UpdateHeader();
+                UpdateHeaderTemplate();
+            }
+        }
+
+        public DataTemplate DefaultHeaderTemplate { get; set; }
 
         public static NavigationViewHeaderMode GetHeaderMode(Page item)
         {
@@ -73,18 +83,6 @@ namespace CalendarAppointments.Behaviors
         {
             base.OnDetaching();
             NavigationService.Navigated -= OnNavigated;
-        }
-
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            var frame = sender as Frame;
-            if (frame.Content is Page page)
-            {
-                _currentPage = page;
-
-                UpdateHeader();
-                UpdateHeaderTemplate();
-            }
         }
 
         private void UpdateHeader()

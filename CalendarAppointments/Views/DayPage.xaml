@@ -62,7 +62,7 @@
             </Grid>
             <Grid Grid.Row="1">
                 <Grid>
-                    <ListView ItemsSource="{x:Bind ViewModel.Days}">
+                    <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="models:DayHour">
                                 <Grid>
@@ -135,7 +135,7 @@
             </Grid>
             <Grid Grid.Row="2">
                     <Grid>
-                    <ListView ItemsSource="{x:Bind ViewModel.Days}">
+                    <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="models:DayHour">
                                     <Grid>

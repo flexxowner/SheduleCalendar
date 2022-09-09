@@ -9,29 +9,65 @@ using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using Helpers.Helpers;
 using System.Collections.ObjectModel;
-using System.Timers;
-using System.Threading;
+using System.ComponentModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Windows.UI.Xaml;
 
 namespace CalendarAppointments.Controllers
 {
-    public class Graph
+    public class Graph: ObservableObject, INotifyPropertyChanged
     {
-        public RelayCommand SignOutCommand { get; set; }
-        public RelayCommand CallGraphCommand { get; set; }
-        private static readonly IPublicClientApplication Pca = PublicClientApplicationBuilder.Create(ClientId).WithTenantId(Tenant).Build();
         private const string path = "outlook.xml";
         private const string ClientId = "efaa2831-d90e-4876-8fd3-560952cdff66";
         private const string Tenant = "common";
         private const string Authority = "https://login.microsoftonline.com/" + Tenant;
+        private static readonly IPublicClientApplication Pca = PublicClientApplicationBuilder.Create(ClientId).WithTenantId(Tenant).Build();
         private static IPublicClientApplication PublicClientApp;
         private static string MSGraphURL = "https://graph.microsoft.com/v1.0/";
         private static AuthenticationResult authResult;
         private static string[] scopes = new string[] { "user.read", "Calendars.Read" };
+        private string userName;
+        private string tokenExpires;
+        private Visibility visibility = Visibility.Collapsed;
 
         public Graph()
         {
             CallGraphCommand = new RelayCommand(CallGraph);
             SignOutCommand = new RelayCommand(SignOut);
+        }
+
+        public RelayCommand SignOutCommand { get; set; }
+
+        public RelayCommand CallGraphCommand { get; set; }
+
+        public string UserName
+        {
+            get => userName;
+            set
+            {
+                userName = value;
+                OnPropertyChanged(nameof(UserName));
+            }
+        }
+
+        public string TokenExpires
+        {
+            get => tokenExpires;
+            set
+            {
+                tokenExpires = value;
+                OnPropertyChanged(nameof(TokenExpires));
+            }
+        }
+
+        public Visibility Visibility
+        {
+            get => visibility;
+            set
+            {
+                visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+            }
         }
 
         public static async void GetEventsAsync()
@@ -65,7 +101,7 @@ namespace CalendarAppointments.Controllers
             }
             if (appointments != null)
             {
-                FileManager.SaveToExistingFile(appointments,path);
+                FileManager.WriteToFile(appointments,path);
             }
         }
 
@@ -107,6 +143,8 @@ namespace CalendarAppointments.Controllers
             {
                 GraphServiceClient graphClient = await SignInAndInitializeGraphServiceClient(scopes);
                 User GraphUser = await graphClient.Me.Request().GetAsync();
+                GetEventsAsync();
+                SetBasicTokenInfo(authResult);
             }
             catch(Exception e)
             {
@@ -122,9 +160,9 @@ namespace CalendarAppointments.Controllers
                 IAccount firstAccount = accounts.FirstOrDefault();
                 await PublicClientApp.RemoveAsync(firstAccount).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                DialogHelper.ErrorDialog(e);
+
             }
         }
 
@@ -137,6 +175,16 @@ namespace CalendarAppointments.Controllers
                 }));
 
             return await Task.FromResult(graphClient);
+        }
+
+        private void SetBasicTokenInfo(AuthenticationResult authResult)
+        {
+            if (authResult != null)
+            {
+                UserName = $"User Name: {authResult.Account.Username}";
+                TokenExpires = $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}";
+                Visibility = Visibility.Visible;
+            }
         }
 
     }

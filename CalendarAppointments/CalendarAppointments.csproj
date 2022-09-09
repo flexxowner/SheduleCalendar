@@ -145,12 +145,12 @@
     <Compile Include="Controllers\Graph.cs" />
     <Compile Include="Controllers\DefaultRedirectUri.cs" />
     <Compile Include="Activation\ActivationService.cs" />
-    <Compile Include="Services\BackgroundTaskService.cs" />
-    <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\ResourceExtensions.cs" />
-    <Compile Include="Services\SettingsPageService.cs" />
-    <Compile Include="Services\ShellService.cs" />
-    <Compile Include="Services\ThemeSelectorService.cs" />
+    <Compile Include="AppServices\BackgroundTaskService.cs" />
+    <Compile Include="AppServices\NavigationService.cs" />
+    <Compile Include="AppServices\ResourceExtensions.cs" />
+    <Compile Include="AppServices\SettingsPageService.cs" />
+    <Compile Include="AppServices\ShellService.cs" />
+    <Compile Include="AppServices\ThemeSelectorService.cs" />
     <Compile Include="Views\DayPage.xaml.cs">
       <DependentUpon>DayPage.xaml</DependentUpon>
     </Compile>

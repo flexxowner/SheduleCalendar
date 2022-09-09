@@ -8,11 +8,10 @@ namespace CalendarAppointments.Activation
 
         public abstract Task HandleAsync(object args);
     }
+
     public abstract class ActivationHandler<T> : ActivationHandler
         where T : class
     {
-        protected abstract Task HandleInternalAsync(T args);
-
         public override async Task HandleAsync(object args)
         {
             await HandleInternalAsync(args as T);
@@ -22,6 +21,8 @@ namespace CalendarAppointments.Activation
         {
             return args is T && CanHandleInternal(args as T);
         }
+
+        protected abstract Task HandleInternalAsync(T args);
 
         protected virtual bool CanHandleInternal(T args)
         {

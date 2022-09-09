@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using CalendarAppointments.Models.Models;
 using CalendarAppointments.ViewModel.Extensions;
-using Helpers.Helpers;
+using CalendarAppointments.ViewModel.Services;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using Windows.Storage;
+using DayOfWeek = CalendarAppointments.Models.Models.DayOfWeek;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
@@ -18,124 +17,145 @@ namespace CalendarAppointments.ViewModel.ViewModels
     {
         CultureInfo myCulture = new CultureInfo("en-US");
         Calendar cal = new CultureInfo("en-US").Calendar;
-        public RelayCommand GoBackCommand { get; set; }
-        public RelayCommand GoForwardCommand { get; set; }
-        private const string firstPath = "Appointments.xml";
-        private const string secondPath = "outlook.xml";
-        private List<DateTime> hours { get; set; }
-        private ObservableCollection<Models.Models.DayOfWeek> daysOfWeeks;
-        private ObservableCollection<DayHour> days;
-        private ObservableCollection<Event> events;
+        private const string FirstPath = "Appointments.xml";
+        private const string SecondPath = "outlook.xml";
+        private const string Format = "MMMM";
+        private readonly ObservableCollection<DayOfWeek> daysOfWeeks;
+        private readonly ObservableCollection<DayHour> dayHours;
+        private readonly List<DateTime> hours;
+        private readonly ObservableCollection<Event> events;
         private DateTime today = DateTime.Now;
         private DateTime tomorrow;
         private int currentWeek;
         private int tomorrowWeek;
         private string month;
         private string tomorrowMonth;
+
         public DayViewModel()
         {
-            daysOfWeeks = new ObservableCollection<Models.Models.DayOfWeek>();
+            daysOfWeeks = new ObservableCollection<DayOfWeek>();
             events = new ObservableCollection<Event>();
-            days = new ObservableCollection<DayHour>();
+            dayHours = new ObservableCollection<DayHour>();
             hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
             tomorrow = today.AddDays(1);
             currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             tomorrowWeek = cal.GetWeekOfYear(today.AddDays(1), CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            tomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            Days.AddHours(hours, Today, Tomorrow);
-            Days.ReadFromFile(firstPath, Today, Tomorrow);
-            Days.ReadFromFile(secondPath, Today, Tomorrow);
+            month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
+            tomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
+            DayHours.AddHours(hours, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours,FirstPath, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
 
-        public ObservableCollection<Models.Models.DayOfWeek> DaysOfWeeks
+        public RelayCommand GoBackCommand { get; set; }
+
+        public RelayCommand GoForwardCommand { get; set; }
+
+        public ObservableCollection<DayOfWeek> DaysOfWeeks
         {
-            get { return daysOfWeeks; }
-            set { daysOfWeeks = value; }
+            get => daysOfWeeks;
         }
-        public ObservableCollection<DayHour> Days
+
+        public ObservableCollection<DayHour> DayHours
         {
-            get { return days; }
-            set { days = value; }
+            get => dayHours;
         }
+
+        public List<DateTime> Hours
+        {
+            get => hours;
+        }
+
         public DateTime Today
         {
-            get { return today; }
+            get => today;
             set {
                 today = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Today));
             }
         }
+
         public DateTime Tomorrow
         {
-            get { return tomorrow; }
+            get => tomorrow;
             set 
             { 
                 tomorrow = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Tomorrow));
             }
         }
+
+        public ObservableCollection<Event> Events
+        {
+            get => events;
+        }
+
         public int CurrentWeek
         {
-            get { return currentWeek;}
+            get => currentWeek;
             set
             { 
                 currentWeek = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentWeek));
             }
         }
+
         public int TomorrowWeek
         {
-            get { return tomorrowWeek;}
+            get => tomorrowWeek;
             set
             { 
                 tomorrowWeek = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(TomorrowWeek));
             }
         }
+
         public string TomorrowMonth
         {
-            get { return tomorrowMonth;}
+            get => tomorrowMonth;
             set
             {
                 tomorrowMonth = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(TomorrowMonth));
             }
         }
+
         public string Month
         {
-            get { return month; }
+            get => month;
             set 
             { 
                 month = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Month));
             }
         }
+
         private void GoBack()
         {
-            Today = today.AddDays(-1);
-            Tomorrow = tomorrow.AddDays(-1);
-            Month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            Today = DataChanger.ChangeTodayBack(Today);
+            Tomorrow = DataChanger.ChangeTomorrowBack(Tomorrow);
+            Month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
+            TomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            Days.AddHours(hours, Today, Tomorrow);
-            Days.ReadFromFile(firstPath, Today, Tomorrow);
-            Days.ReadFromFile(secondPath, Today, Tomorrow);
+            DayHours.AddHours(hours, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours, FirstPath, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
         }
+
         private void GoForward()
         {
-            Today = today.AddDays(1);
-            Tomorrow = tomorrow.AddDays(1);
-            Month = today.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
-            TomorrowMonth = tomorrow.ToString("MMMM", myCulture.DateTimeFormat).ToLower();
+            Today = DataChanger.ChangeTodayForward(Today);
+            Tomorrow = DataChanger.ChangeTomorrowForward(Tomorrow);
+            Month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
+            TomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            Days.AddHours(hours, Today, Tomorrow);
-            Days.ReadFromFile(firstPath, Today, Tomorrow);
-            Days.ReadFromFile(secondPath, Today, Tomorrow);
+            DayHours.AddHours(hours, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours, FirstPath, Today, Tomorrow);
+            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
         }
 
     }

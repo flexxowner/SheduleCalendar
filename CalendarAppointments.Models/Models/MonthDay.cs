@@ -5,18 +5,18 @@ namespace CalendarAppointments.Models.Models
 {
     public class MonthDay
     {
-        public DateTime Date { get; set; }
-        private ObservableCollection<Event> events;
+        private readonly ObservableCollection<Event> events;
 
         public MonthDay()
         {
             events = new ObservableCollection<Event>();
         }
 
+        public DateTime Date { get; set; }
+
         public ObservableCollection<Event> Events
         {
-            get { return events; }
-            set { events = value; }
+            get => events;
         }
     }
 }

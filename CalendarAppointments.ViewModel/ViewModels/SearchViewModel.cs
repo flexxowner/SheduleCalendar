@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using CalendarAppointments.Models.Models;
-using Helpers.Helpers;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Windows.Storage;
 using CalendarAppointments.ViewModel.Extensions;
+using System.ComponentModel;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
-    public class SearchViewModel : ObservableObject
+    public class SearchViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private ObservableCollection<Event> events;
-        private ObservableCollection<Event> foundEvents;
-        private string title;
         private const string firstPath = "Appointments.xml";
         private const string secondPath = "outlook.xml";
+        private readonly ObservableCollection<Event> events;
+        private readonly ObservableCollection<Event> foundEvents;
+        private string title;
 
         public SearchViewModel()
         {
@@ -29,19 +24,17 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         public ObservableCollection<Event> Events
         {
-            get { return events; }
-            set { events = value; }
+            get => events;
         }
 
         public ObservableCollection<Event> FoundEvents
         {
-            get { return foundEvents; }
-            set { foundEvents = value; }
+            get => foundEvents;
         }
 
         public string Title
         {
-            get { return title; }
+            get => title;
             set
             {
                 FoundEvents.Clear();
