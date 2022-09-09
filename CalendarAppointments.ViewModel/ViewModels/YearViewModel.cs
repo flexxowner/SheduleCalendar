@@ -4,9 +4,7 @@ using CalendarAppointments.Models.Models;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using CalendarAppointments.ViewModel.Service;
 using Microsoft.Toolkit.Mvvm.Input;
-using System.ComponentModel;
 using CalendarAppointments.ViewModel.Services;
-using CalendarAppointments.ViewModel.Extensions;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
