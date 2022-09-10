@@ -134,7 +134,7 @@ namespace CalendarAppointments.ViewModel.Service
             }
         }
 
-        public static async void ReadEventsFromFile(ObservableCollection<Event> events, ObservableCollection<DayHour> hours, string path, DateTime Today, DateTime Tomorrow)
+        public static async void ReadEventsFromFile(ObservableCollection<Event> events, ObservableCollection<DayHour> hours, string path)
         {
             StorageFile localFile;
             try
@@ -150,7 +150,7 @@ namespace CalendarAppointments.ViewModel.Service
                 string localData = await FileIO.ReadTextAsync(localFile);
 
                 var data = ObjectSerializer<ObservableCollection<Event>>.FromXml(localData);
-                AddHourEvents(data, hours, Today, Tomorrow);
+                AddHourEvents(data, hours);
             }
         }
 
@@ -182,13 +182,13 @@ namespace CalendarAppointments.ViewModel.Service
             }
         }
 
-        private static void AddHourEvents(ObservableCollection<Event> events, ObservableCollection<DayHour> hours, DateTime Today, DateTime Tomorrow)
+        private static void AddHourEvents(ObservableCollection<Event> events, ObservableCollection<DayHour> hours)
         {
             foreach (var hour in hours)
             {
                 foreach (var e in events)
                 {
-                    if (e.StartTime.Hours == hour.Hour.Hour && e.StartDate.Date == hour.Date)
+                    if (e.StartTime.Hours == hour.Hour.Hour && e.StartDate.Date == hour.Date.Date)
                     {
                         hour.Events.Add(e);
                     }

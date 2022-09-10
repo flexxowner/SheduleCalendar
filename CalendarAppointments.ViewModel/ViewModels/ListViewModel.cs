@@ -6,7 +6,6 @@ using Microsoft.Toolkit.Mvvm.Input;
 using CalendarAppointments.ViewModel.Service;
 using System.ComponentModel;
 using CalendarAppointments.ViewModel.Services;
-using CalendarAppointments.ViewModel.Extensions;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {

@@ -21,6 +21,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private const int Max = 12;
         private const int Min = 1;
         private const string Culture = "en";
+        private readonly string month;
         private readonly ObservableCollection<DayOfWeek> daysOfWeeks;
         private readonly ObservableCollection<Event> events;
         private readonly ObservableCollection<MonthDay> calendarDays;
@@ -36,9 +37,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         public MonthViewModel()
         {
+            month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture)).ToUpper();
             months = new ObservableCollection<CalendarMonth>()
             {
-                new CalendarMonth() { Month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture)).ToUpper(), Year = today.Year}
+                new CalendarMonth() { Month = month, Year = today.Year}
             };
             daysOfWeeks = new ObservableCollection<DayOfWeek>();
             calendarDays = new ObservableCollection<MonthDay>();

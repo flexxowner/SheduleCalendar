@@ -15,7 +15,7 @@ namespace CalendarAppointments.ViewModel.Extensions
 
         public static void ReadEventsFromFile(this ObservableCollection<Event> events, ObservableCollection<DayHour> hours, string path, DateTime Today, DateTime Tomorrow)
         {
-            EventService.ReadEventsFromFile(events, hours, path, Today, Tomorrow);
+            EventService.ReadEventsFromFile(events, hours, path);
         }
     }
 }

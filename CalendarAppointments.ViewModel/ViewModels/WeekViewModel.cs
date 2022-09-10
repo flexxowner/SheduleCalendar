@@ -11,7 +11,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
     public class WeekViewModel : ObservableObject, INotifyPropertyChanged
     {
         Calendar cal = new CultureInfo("en-US").Calendar;
-        public IEnumerable<string> Hours { get; set; }
         private readonly ObservableCollection<Week> weeks;
 
         public WeekViewModel()
@@ -22,6 +21,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
         public RelayCommand GoBackCommand { get; set; }
 
         public RelayCommand GoForwardCommand { get; set; }
+
+        public IEnumerable<string> Hours { get; set; }
 
         public ObservableCollection<Week> Weeks
         {
