@@ -14,7 +14,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private const string SecondPath = "outlook.xml";
         private const string Format = "MMMM";
         private const string Culture = "en";
-        private const int min = 1;
+        private const int Min = 1;
         private readonly ObservableCollection<Year> years;
         private DateTime currentDate;
 
@@ -48,14 +48,14 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         private void GoBack()
         {
-            CurrentDate = DataChanger.ChangeDateBack(CurrentDate, min);
+            CurrentDate = DataChanger.ChangeDateBack(CurrentDate, Min);
             years.Clear();
             years.AddDates(CurrentDate.Year, Path, SecondPath, Format, Culture);
         }
 
         private void GoForward()
         {
-            CurrentDate = DataChanger.ChangeDateForward(CurrentDate, min);
+            CurrentDate = DataChanger.ChangeDateForward(CurrentDate, Min);
             years.Clear();
             years.AddDates(CurrentDate.Year, Path, SecondPath, Format, Culture);
         }

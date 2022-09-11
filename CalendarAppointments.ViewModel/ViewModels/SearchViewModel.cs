@@ -8,8 +8,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
 {
     public class SearchViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private const string firstPath = "Appointments.xml";
-        private const string secondPath = "outlook.xml";
+        private const string FirstPath = "Appointments.xml";
+        private const string SecondPath = "outlook.xml";
         private readonly ObservableCollection<Event> events;
         private readonly ObservableCollection<Event> foundEvents;
         private string title;
@@ -18,8 +18,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             events = new ObservableCollection<Event>();
             foundEvents = new ObservableCollection<Event>();
-            Events.ReadEventsFromFile(firstPath);
-            Events.ReadEventsFromFile(secondPath);
+            Events.ReadEventsFromFile(FirstPath);
+            Events.ReadEventsFromFile(SecondPath);
         }
 
         public ObservableCollection<Event> Events

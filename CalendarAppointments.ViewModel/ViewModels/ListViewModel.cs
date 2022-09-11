@@ -11,9 +11,9 @@ namespace CalendarAppointments.ViewModel.ViewModels
 {
     public class ListViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private const string firstPath = "Appointments.xml";
-        private const string secondPath = "outlook.xml";
-        private const int min = 1;
+        private const string FirstPath = "Appointments.xml";
+        private const string SecondPath = "outlook.xml";
+        private const int Min = 1;
         private readonly ObservableCollection<ListModel> dates;
         private DateTime currentDate;
         private int year;
@@ -23,7 +23,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
             currentDate = DateTime.Today;
             year = currentDate.Year;
             dates = new ObservableCollection<ListModel>();
-            dates.AddDates(year, firstPath, secondPath);
+            dates.AddDates(year, FirstPath, SecondPath);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
@@ -55,16 +55,16 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         private void GoBack()
         {
-            CurrentDate = DataChanger.ChangeDateBack(CurrentDate, min);
+            CurrentDate = DataChanger.ChangeDateBack(CurrentDate, Min);
             dates.Clear();
-            Dates.AddDates(year, firstPath, secondPath);
+            Dates.AddDates(year, FirstPath, SecondPath);
         }
 
         private void GoForward()
         {
-            CurrentDate = DataChanger.ChangeDateForward(CurrentDate, min);
+            CurrentDate = DataChanger.ChangeDateForward(CurrentDate, Min);
             dates.Clear();
-            Dates.AddDates(year, firstPath, secondPath);
+            Dates.AddDates(year, FirstPath, SecondPath);
         }
 
     }
