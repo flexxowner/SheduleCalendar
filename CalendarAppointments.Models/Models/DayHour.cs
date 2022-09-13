@@ -5,7 +5,7 @@ namespace CalendarAppointments.Models.Models
 {
     public class DayHour
     {
-        private readonly ObservableCollection<Event> events;
+        private ObservableCollection<Event> events;
 
         public DayHour()
         {
@@ -23,6 +23,7 @@ namespace CalendarAppointments.Models.Models
         public ObservableCollection<Event> Events
         {
             get => events;
+            set { events = value; }
         }
     }
 }

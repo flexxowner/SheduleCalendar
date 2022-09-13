@@ -10,7 +10,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
 {
     public class WeekViewModel : ObservableObject, INotifyPropertyChanged
     {
-        Calendar cal = new CultureInfo("en-US").Calendar;
         private readonly ObservableCollection<Week> weeks;
 
         public WeekViewModel()

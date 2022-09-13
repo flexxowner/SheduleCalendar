@@ -43,8 +43,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
             month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
             tomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
             DayHours.AddHours(hours, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours,FirstPath, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
@@ -141,8 +141,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
             DayHours.AddHours(hours, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours, FirstPath, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
         }
 
         private void GoForward()
@@ -154,8 +154,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
             CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
             TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
             DayHours.AddHours(hours, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours, FirstPath, Today, Tomorrow);
-            Events.ReadEventsFromFile(DayHours, SecondPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
+            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
         }
 
     }

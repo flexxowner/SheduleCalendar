@@ -134,7 +134,7 @@ namespace CalendarAppointments.ViewModel.Service
             }
         }
 
-        public static async void ReadEventsFromFile(ObservableCollection<Event> events, ObservableCollection<DayHour> hours, string path)
+        public static async void ReadEventsFromFile(ObservableCollection<DayHour> hours, string path)
         {
             StorageFile localFile;
             try

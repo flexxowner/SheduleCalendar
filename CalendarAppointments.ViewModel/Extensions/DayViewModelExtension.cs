@@ -13,9 +13,9 @@ namespace CalendarAppointments.ViewModel.Extensions
             DateFiller.AddHours(dayHours, hours, Today, Tomorrow);
         }
 
-        public static void ReadEventsFromFile(this ObservableCollection<Event> events, ObservableCollection<DayHour> hours, string path, DateTime Today, DateTime Tomorrow)
+        public static void ReadEventsFromFile(this ObservableCollection<DayHour> hours, string path, DateTime Today, DateTime Tomorrow)
         {
-            EventService.ReadEventsFromFile(events, hours, path);
+            EventService.ReadEventsFromFile(hours, path);
         }
     }
 }
