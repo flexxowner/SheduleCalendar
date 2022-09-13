@@ -36,12 +36,12 @@ namespace CalendarAppointments.ViewModel.ViewModels
             daysOfWeeks = new ObservableCollection<DayOfWeek>();
             events = new ObservableCollection<Event>();
             dayHours = new ObservableCollection<DayHour>();
-            hours = (List<DateTime>)Enumerable.Range(00, 24).Select(i => (DateTime.MinValue.AddHours(i))).ToList();
+            hours = DataChanger.GetHours();
             tomorrow = today.AddDays(1);
-            currentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
-            tomorrowWeek = cal.GetWeekOfYear(today.AddDays(1), CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
-            month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
-            tomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
+            currentWeek = DataChanger.GetWeek(cal, today);
+            tomorrowWeek = DataChanger.GetWeek(cal, today.AddDays(1));
+            month = DataChanger.DateToStringLower(today, Format, myCulture);
+            tomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
             DayHours.AddHours(hours, Today, Tomorrow);
             DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
             DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
@@ -136,10 +136,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             Today = DataChanger.ChangeTodayBack(Today);
             Tomorrow = DataChanger.ChangeTomorrowBack(Tomorrow);
-            Month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
-            TomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
-            CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
-            TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            Month = DataChanger.DateToStringLower(today, Format, myCulture);
+            TomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
+            CurrentWeek = DataChanger.GetWeek(cal, Today);
+            TomorrowWeek = DataChanger.GetWeek(cal, Tomorrow);
             DayHours.AddHours(hours, Today, Tomorrow);
             DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
             DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
@@ -149,10 +149,10 @@ namespace CalendarAppointments.ViewModel.ViewModels
         {
             Today = DataChanger.ChangeTodayForward(Today);
             Tomorrow = DataChanger.ChangeTomorrowForward(Tomorrow);
-            Month = today.ToString(Format, myCulture.DateTimeFormat).ToLower();
-            TomorrowMonth = tomorrow.ToString(Format, myCulture.DateTimeFormat).ToLower();
-            CurrentWeek = cal.GetWeekOfYear(today, CalendarWeekRule.FirstDay, today.DayOfWeek);
-            TomorrowWeek = cal.GetWeekOfYear(tomorrow, CalendarWeekRule.FirstDay, tomorrow.DayOfWeek);
+            Month = DataChanger.DateToStringLower(today, Format, myCulture);
+            TomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
+            CurrentWeek = DataChanger.GetWeek(cal,Today);
+            TomorrowWeek = DataChanger.GetWeek(cal, Tomorrow);
             DayHours.AddHours(hours, Today, Tomorrow);
             DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
             DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);

@@ -37,7 +37,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         public MonthViewModel()
         {
-            month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture)).ToUpper();
+            month = DataChanger.DateToStringUpper(today, Format, Culture);
             months = new ObservableCollection<CalendarMonth>()
             {
                 new CalendarMonth() { Month = month, Year = today.Year}
