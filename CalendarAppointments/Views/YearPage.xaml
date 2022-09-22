@@ -5,12 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:CalendarAppointments.Models.Models" xmlns:viewmodels="using:CalendarAppointments.ViewModel.ViewModels"
     Style="{StaticResource PageStyle}"
-    Width="1460"
+    Name="Year"
     mc:Ignorable="d">
     <Page.DataContext>
         <viewmodels:YearViewModel/>
     </Page.DataContext>
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}" Width="{Binding ElementName=Year, Path=ActualWidth}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.1*"/>

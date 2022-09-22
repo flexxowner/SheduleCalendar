@@ -6,15 +6,22 @@ namespace CalendarAppointments.Models.Models
 {
     public class Week
     {
-        public ObservableCollection<Event> Events { get; set; }
+        private ObservableCollection<DayHour> hours;
 
-        public IEnumerable<string> Hours { get; set; }
+        public Week()
+        {
+            hours = new ObservableCollection<DayHour>();
+        }
 
-        public DateTime Today { get; set; }
+        public ObservableCollection<DayHour> Hours
+        { 
+            get => hours;
+            set => hours = value;
+        }
+
+        public DateTime Date { get; set; }
 
         public int WeekNumber { get; set; }
-
-        public System.DayOfWeek DayOfWeek { get; set; }
 
     }
 }

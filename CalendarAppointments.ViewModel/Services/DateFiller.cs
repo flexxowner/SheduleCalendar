@@ -1,4 +1,5 @@
 ﻿using CalendarAppointments.Models.Models;
+using Microsoft.Office.Interop.Outlook;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,11 +14,11 @@ namespace CalendarAppointments.ViewModel.Service
         public static void AddDates(
             this ObservableCollection<ListModel> dates, int Year, string firstPath, string secondPath)
         {
-            for (int i = 1; i < Max; i++)
+            for (var i = 1; i < Max; i++)
             {
                 var month = new DateTime(Year, i, 1);
                 var days = new ObservableCollection<MonthDay>();
-                for (int j = 1; j < DateTime.DaysInMonth(Year, month.Month) + 1; j++)
+                for (var j = 1; j < DateTime.DaysInMonth(Year, month.Month) + 1; j++)
                 {
                     days.Add(new MonthDay() { Date = new DateTime(Year, i, j) });
                 }
@@ -65,12 +66,55 @@ namespace CalendarAppointments.ViewModel.Service
             }
         }
 
-        public static void AddHours(ObservableCollection<DayHour> dayHours, List<DateTime> hours, DateTime Today, DateTime Tomorrow)
+        public static ObservableCollection<DayHour> AddHours(ObservableCollection<DayHour> dayHours, List<DateTime> hours, DateTime Today)
         {
-            dayHours.Clear();
-            foreach (var hour in hours)
+            if (dayHours != null)
             {
-                dayHours.Add(new DayHour() { Hour = hour, Date = Today.Date.Date });
+                dayHours.Clear();
+                foreach (var hour in hours)
+                {
+                    dayHours.Add(new DayHour() { Hour = hour, Date = Today.Date.Date });
+                }
+            }
+            else if (dayHours == null)
+            {
+                foreach (var hour in hours)
+                {
+                    dayHours.Add(new DayHour() { Hour = hour, Date = Today.Date.Date });
+                }
+            }
+            return dayHours;
+        }
+
+        public static ObservableCollection<DateTime> AddDaysOfWeek(ObservableCollection<DateTime> listOfDays, DateTime startDate, DateTime endDate)
+        {
+            do
+            {
+                startDate = startDate.AddDays(1);
+                listOfDays.Add(startDate);
+            } while (startDate.DayOfWeek != endDate.DayOfWeek);
+
+            return listOfDays;
+        }
+
+        public static void AddDateToWeekList(ObservableCollection<Week> weeks, ObservableCollection<DateTime> listOfDays)
+        {
+            foreach (var item in listOfDays)
+            {
+                weeks.Add(new Week() { Date = item.Date});
+            }
+
+        }
+
+        public static void AddHoursToWeekDays(ObservableCollection<Week> weeks, ObservableCollection<DayHour> dayHours, List<DateTime> hours)
+        {
+            for (var i = 0; i < weeks.Count; i++)
+            {
+                var dailyHours = AddHours(dayHours, hours, weeks[i].Date);
+                for (var j = 0; j < dailyHours.Count; j++)
+                {
+                    weeks[i].Hours.Add(dailyHours[j]);
+                }
             }
         }
     }

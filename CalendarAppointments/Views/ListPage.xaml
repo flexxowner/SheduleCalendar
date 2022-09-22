@@ -5,9 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:CalendarAppointments.Models.Models"
     Style="{StaticResource PageStyle}"
+    Name="List"
     mc:Ignorable="d">
-    
-    <Grid x:Name="ContentArea" >
+
+    <Grid x:Name="ContentArea">
         <Grid
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
             <Grid.Resources>
@@ -35,7 +36,7 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ElementName=ContentArea, Path=ActualWidth}">
                 <ListView ItemsSource="{x:Bind ViewModel.Dates}" Height="Auto" Width="Auto">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">

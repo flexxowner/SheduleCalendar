@@ -8,10 +8,149 @@
     mc:Ignorable="d">
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0">
+            <Button Command="{x:Bind ViewModel.GoBackCommand}" HorizontalAlignment="Left">
+                <Button.Content>
+                    <SymbolIcon Symbol="Back"/>
+                </Button.Content>
+            </Button>
+            <Button Command="{x:Bind ViewModel.GoForwardCommand}" HorizontalAlignment="Right">
+                <Button.Content>
+                    <SymbolIcon Symbol="Forward"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" x:Name="GridRow1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.079*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <GridView ItemsSource="{x:Bind ViewModel.Weeks}" Height="{Binding ElementName=GridRow1, Path=Height}">
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                            <Setter Property="Width" Value="143"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Height" Value="Auto"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Week">
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <TextBlock Text="{Binding Date.DayOfWeek}"/>
+                                <TextBlock Text="{Binding Date.Day}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" x:Name="HourGrid">
+            <ListView Margin="-33,-15,0,0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="BorderBrush" Value="Gray"/>
+                                    <Setter Property="BorderThickness" Value="1.2"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:DayHour">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding HourString}" TextAlignment="Center" Height="Auto" Width="100"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <ListView ItemsSource="{x:Bind ViewModel.Weeks}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Width" Value="143" x:Name="WeekListWidth"/>
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                    <Setter Property="BorderBrush" Value="Gray"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsStackPanel Orientation="Horizontal"
+                                                     VerticalAlignment="Stretch"
+                                                     ScrollViewer.HorizontalScrollMode="Auto"
+                                                     ScrollViewer.VerticalScrollMode="Disabled" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Week">
+                                    <Grid>
+                                        <ListView ItemsSource="{Binding Hours}">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="IsHitTestVisible" Value="True"/>
+                                                    <Setter Property="Width" Value="Auto"/>
+                                                    <Setter Property="BorderBrush" Value="Gray"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Margin" Value="0"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:DayHour">
+                                                    <ListView ItemsSource="{Binding Events}">
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="ListViewItem">
+                                                                <Setter Property="IsHitTestVisible" Value="True"/>
+                                                                <Setter Property="Height" Value="Auto"/>
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate x:DataType="models:Event">
+                                                                <Border Background="Green">
+                                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                                        <TextBlock Text="{Binding StartTimeString}"/>
+                                                                        <TextBlock Text="{Binding Subject}"/>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </ListView>
         </Grid>
     </Grid>
 </Page>

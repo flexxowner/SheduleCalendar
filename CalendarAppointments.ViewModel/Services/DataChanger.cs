@@ -1,6 +1,4 @@
-﻿using Microsoft.Graph.Models;
-using Microsoft.Graph.Models.ExternalConnectors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -39,9 +37,9 @@ namespace CalendarAppointments.ViewModel.Services
             return week;
         }
 
-        public static string DateToStringUpper(DateTimeOffset today, string Format, string Culture)
+        public static string DateToString(DateTimeOffset today, string Format, string Culture)
         {
-            var month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture)).ToUpper();
+            var month = today.ToString(Format, CultureInfo.CreateSpecificCulture(Culture));
             return month;
         }
 
@@ -95,6 +93,18 @@ namespace CalendarAppointments.ViewModel.Services
         {
             currentDate = new DateTime(currentDate.Year - min, min, min);
             return currentDate;
+        }
+
+        public static DateTime GetThisWeekStart(DateTime currentDate)
+        {
+            var thisWeekStart = currentDate.AddDays(-(int)currentDate.DayOfWeek);
+            return thisWeekStart;
+        }
+
+        public static DateTime GetThisWeekEnd(DateTime thisWeekStart)
+        {
+            var thisWeekEnd = thisWeekStart.AddDays(8).AddSeconds(-1);
+            return thisWeekEnd;
         }
 
         public static DateTime ChangeDateForward(DateTime currentDate, int min)

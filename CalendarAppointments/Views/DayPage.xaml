@@ -11,18 +11,14 @@
         <vm:DayViewModel/>
     </Page.DataContext>
     <Grid x:Name="ContentArea">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.2*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.22*"/>
+                    <ColumnDefinition Width="0.1*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -30,32 +26,43 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                         <Button Command="{x:Bind ViewModel.GoBackCommand}" Content="Prev"/>
                         <Button Command="{x:Bind ViewModel.GoForwardCommand}" Content="Next"/>
                     </StackPanel>
                 </Grid>
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Border BorderBrush="Gray" BorderThickness="1 1 0 1"></Border>
+                </Grid>
                 <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.3*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind ViewModel.Month, Mode=OneWay}" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto"/>
-                            <TextBlock Text="{x:Bind ViewModel.Today.Year, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto"/>
-                        </StackPanel>
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1">
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="{x:Bind ViewModel.Month, Mode=OneWay}" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto" TextAlignment="Center"/>
+                                <TextBlock Text="{x:Bind ViewModel.Today.Year, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto" TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
                     </Grid>
                     <Grid Grid.Column="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="week" FontFamily="Cambria" FontSize="20" Height="Auto" Width="60"/>
-                            <TextBlock Text="{x:Bind ViewModel.CurrentWeek, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto"/>
-                        </StackPanel>
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1">
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="week" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto"/>
+                                <TextBlock Text="{x:Bind ViewModel.CurrentWeek, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1"></Border>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="1">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind ViewModel.Today.DayOfWeek, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="130"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{x:Bind ViewModel.Today.DayOfWeek, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="Auto"/>
                         <TextBlock Text="{x:Bind ViewModel.Today.Day, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="Auto"/>
                     </StackPanel>
                 </Grid>
@@ -63,6 +70,13 @@
             <Grid Grid.Row="1">
                 <Grid>
                     <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="BorderBrush" Value="Gray"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="models:DayHour">
                                 <Grid>
@@ -75,12 +89,19 @@
                                     </Grid>
                                     <Grid Grid.Column ="1">
                                         <ListView ItemsSource="{Binding Events, Mode=TwoWay}">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="models:Event">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding StartTime}"/>
-                                                        <TextBlock Text="{Binding Subject}"/>
-                                                    </StackPanel>
+                                                    <Border Background="Green">
+                                                        <StackPanel Orientation="Horizontal" Spacing="5">
+                                                            <TextBlock Text="{Binding StartTimeString}" FontSize="15"/>
+                                                            <TextBlock Text="{Binding Subject}" FontSize="15"/>
+                                                        </StackPanel>
+                                                    </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
@@ -92,80 +113,5 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.08*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="1" Grid.Row="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind ViewModel.Tomorrow.DayOfWeek, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="130"/>
-                            <TextBlock Text="{x:Bind ViewModel.Tomorrow.Day, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="Auto"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind ViewModel.TomorrowMonth, Mode=OneWay}" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto"/>
-                            <TextBlock Text="{x:Bind ViewModel.Tomorrow.Year, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto" />
-                        </StackPanel>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="week:" FontFamily="Cambria" FontSize="20" Height="Auto" Width="60"/>
-                            <TextBlock Text="{x:Bind ViewModel.TomorrowWeek, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid Grid.Row="2">
-                    <Grid>
-                    <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="models:DayHour">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="0.2*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid Grid.Column="0">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding HourString}"/>
-                                            </StackPanel>
-                                        </Grid>
-                                        <Grid Grid.Column="1">
-                                            <ListView ItemsSource="{Binding Events}">
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate x:DataType="models:Event">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding StartTime}"/>
-                                                            <TextBlock Text="{Binding Subject}"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
-                                        </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                </Grid>
-            </Grid>
     </Grid>
 </Page>

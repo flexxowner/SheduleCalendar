@@ -1,6 +1,7 @@
 ﻿using CalendarAppointments.Models.Models;
 using CalendarAppointments.ViewModel.Extensions;
 using Helpers.Helpers;
+using Microsoft.Graph.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -139,7 +140,7 @@ namespace CalendarAppointments.ViewModel.Service
             StorageFile localFile;
             try
             {
-                localFile = await ApplicationData.Current.LocalFolder.GetFileAsync("path");
+                localFile = await ApplicationData.Current.LocalFolder.GetFileAsync(path);
             }
             catch (FileNotFoundException ex)
             {
@@ -182,18 +183,19 @@ namespace CalendarAppointments.ViewModel.Service
             }
         }
 
-        private static void AddHourEvents(ObservableCollection<Event> events, ObservableCollection<DayHour> hours)
+        private static ObservableCollection<DayHour> AddHourEvents(ObservableCollection<Event> events, ObservableCollection<DayHour> hours)
         {
-            foreach (var hour in hours)
+            foreach (var e in events)
             {
-                foreach (var e in events)
+                foreach (var hour in hours)
                 {
-                    if (e.StartTime.Hours == hour.Hour.Hour && e.StartDate.Date == hour.Date.Date)
+                    if ((e.StartDate.Date == hour.Date.Date) && (e.StartTime.Hours == hour.Hour.Hour) && !hour.Events.Contains(e))
                     {
                         hour.Events.Add(e);
                     }
                 }
             }
+            return hours;
         }
     }
 }

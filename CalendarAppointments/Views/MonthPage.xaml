@@ -6,11 +6,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models1="using:CalendarAppointments.Models.Models"
     xmlns:vm ="using:CalendarAppointments.ViewModel.ViewModels"
-    xmlns:helper ="using:Helpers.Helpers" xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
     x:Name="month"
     mc:Ignorable="d">
-    <UserControl.Resources>
+    <Page.Resources>
         <Color x:Key="AppMidColor">#737272</Color>
         <SolidColorBrush x:Key="AppMidBrush" Color="{StaticResource AppMidColor}"/>
         <Style x:Key="RowLine" TargetType="Border">
@@ -29,19 +28,24 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="{StaticResource AppMidBrush}"/>
         </Style>
-    </UserControl.Resources>
-    <Grid x:Name="ContentArea" Margin="24,10,24,0" d:DataContext="{StaticResource DesignData}">
+    </Page.Resources>
+    
+    <Page.DataContext>
+        <vm:MonthViewModel/>
+    </Page.DataContext>
+
+    <Grid x:Name="ContentArea"  d:DataContext="{StaticResource DesignData}">
         <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Width="{Binding ElementName=month, Path=ActualWidth}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.08*"/>
                 <RowDefinition Height="0.08*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Width="{Binding ElementName=month, Path=ActualWidth}" Height="{Binding ElementName=month, Path=ActualHeight}">
                 <RelativePanel>
                     <Popup x:Name="EventPopUp" Height="850" Width="300" IsOpen="{Binding IsOpen, Mode=OneWay}" RelativePanel.AlignLeftWithPanel="True" IsLightDismissEnabled="True" LightDismissOverlayMode="On">
-                        <StackPanel Orientation="Vertical" Background="Gray" Height="{Binding ElementName=EventPopUp, Path=Height}" Width="{Binding ElementName=EventPopUp, Path=Width}">
+                        <StackPanel Orientation="Vertical" Background="Gray" Height="{Binding ElementName=EventPopUp, Path=ActualHeight}" Width="{Binding ElementName=EventPopUp, Path=ActualWidth}">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Title:" FontSize="15" Height="Auto" Width="Auto"/>
@@ -62,10 +66,16 @@
                         </StackPanel>
                     </Popup>
                 </RelativePanel>
-                <GridView x:Name="Cell" ItemsSource="{x:Bind ViewModel.CalendarDays}" Width="{Binding ElementName=month, Path=Width}" SelectedItem="{x:Bind ViewModel.SelectedDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DoubleTapped="{x:Bind ViewModel.HandleDoubleTapped}" >
+                <GridView x:Name="Cell" ItemsSource="{x:Bind ViewModel.CalendarDays}" Width="{Binding ElementName=month, Path=ActualWidth}" Height="{Binding ElementName=month, Path=ActualHeight}" SelectedItem="{x:Bind ViewModel.SelectedDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DoubleTapped="{x:Bind ViewModel.HandleDoubleTapped}">
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="BorderBrush" Value="Gray"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models1:MonthDay">
-                            <Grid Height="130" Width="162,5">
+                            <Grid Width="165" Height="160">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.2*"/>
                                     <ColumnDefinition Width="*"/>
@@ -108,29 +118,33 @@
                 </Grid>
                 <Grid Grid.Column="1">
                     <GridView ItemsSource="{x:Bind ViewModel.Months}" Height="Auto" Width="Auto">
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Width" Value="Auto"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="models1:CalendarMonth">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding Month, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="15"/>
-                                    <TextBlock Text="{Binding Year, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="15" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+                                    <TextBlock Text="{Binding Month, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="20"/>
+                                    <TextBlock Text="{Binding Year, Mode=OneWay}" Height="Auto" Width="Auto" Style="{StaticResource DayOfWeeksyle}" FontSize="22" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
                 </Grid>
-                <Grid Grid.Column="2">
-                </Grid>
             </Grid>
-            <Grid Grid.Row="1" Margin="0,0" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="157*"/>
-                    <ColumnDefinition Width="1295*"/>
-                </Grid.ColumnDefinitions>
-                <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=OneWay}" Grid.ColumnSpan="2">
+            <Grid Grid.Row="1" Margin="0,0" Width="{Binding ElementName=month, Path=ActualWidth}" Height="{Binding ElementName=month, Path=ActualHeight}" >
+                <GridView ItemsSource="{x:Bind ViewModel.DaysOfWeeks, Mode=OneWay}">
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models1:DayOfWeek">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding WeekDay}"  Style="{StaticResource DayOfWeeksyle}" Height="Auto" Width="162,5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding WeekDay}"  Style="{StaticResource DayOfWeeksyle}" Height="Auto" Width="165" HorizontalAlignment="Center" TextAlignment="Center" />
                             </StackPanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>

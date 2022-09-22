@@ -10,8 +10,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
     {
         private const string FirstPath = "Appointments.xml";
         private const string SecondPath = "outlook.xml";
-        private readonly ObservableCollection<Event> events;
-        private readonly ObservableCollection<Event> foundEvents;
+        private ObservableCollection<Event> events;
+        private ObservableCollection<Event> foundEvents;
         private string title;
 
         public SearchViewModel()
@@ -25,11 +25,21 @@ namespace CalendarAppointments.ViewModel.ViewModels
         public ObservableCollection<Event> Events
         {
             get => events;
+            set
+            {
+                events = value;
+                OnPropertyChanged(nameof(Events));
+            }
         }
 
         public ObservableCollection<Event> FoundEvents
         {
             get => foundEvents;
+            set
+            {
+                foundEvents = value;
+                OnPropertyChanged(nameof(FoundEvents));
+            }
         }
 
         public string Title

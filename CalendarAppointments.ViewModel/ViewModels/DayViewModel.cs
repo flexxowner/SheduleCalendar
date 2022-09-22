@@ -25,11 +25,8 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private readonly List<DateTime> hours;
         private readonly ObservableCollection<Event> events;
         private DateTime today = DateTime.Now;
-        private DateTime tomorrow;
         private int currentWeek;
-        private int tomorrowWeek;
         private string month;
-        private string tomorrowMonth;
 
         public DayViewModel()
         {
@@ -37,14 +34,11 @@ namespace CalendarAppointments.ViewModel.ViewModels
             events = new ObservableCollection<Event>();
             dayHours = new ObservableCollection<DayHour>();
             hours = DataChanger.GetHours();
-            tomorrow = today.AddDays(1);
             currentWeek = DataChanger.GetWeek(cal, today);
-            tomorrowWeek = DataChanger.GetWeek(cal, today.AddDays(1));
             month = DataChanger.DateToStringLower(today, Format, myCulture);
-            tomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
-            DayHours.AddHours(hours, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
+            DayHours.AddHours(hours, Today);
+            DayHours.ReadEventsFromFile(FirstPath);
+            DayHours.ReadEventsFromFile(SecondPath);
             GoBackCommand = new RelayCommand(GoBack);
             GoForwardCommand = new RelayCommand(GoForward);
         }
@@ -77,16 +71,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             }
         }
 
-        public DateTime Tomorrow
-        {
-            get => tomorrow;
-            set 
-            { 
-                tomorrow = value;
-                OnPropertyChanged(nameof(Tomorrow));
-            }
-        }
-
         public ObservableCollection<Event> Events
         {
             get => events;
@@ -99,26 +83,6 @@ namespace CalendarAppointments.ViewModel.ViewModels
             { 
                 currentWeek = value;
                 OnPropertyChanged(nameof(CurrentWeek));
-            }
-        }
-
-        public int TomorrowWeek
-        {
-            get => tomorrowWeek;
-            set
-            { 
-                tomorrowWeek = value;
-                OnPropertyChanged(nameof(TomorrowWeek));
-            }
-        }
-
-        public string TomorrowMonth
-        {
-            get => tomorrowMonth;
-            set
-            {
-                tomorrowMonth = value;
-                OnPropertyChanged(nameof(TomorrowMonth));
             }
         }
 
@@ -135,27 +99,21 @@ namespace CalendarAppointments.ViewModel.ViewModels
         private void GoBack()
         {
             Today = DataChanger.ChangeTodayBack(Today);
-            Tomorrow = DataChanger.ChangeTomorrowBack(Tomorrow);
             Month = DataChanger.DateToStringLower(today, Format, myCulture);
-            TomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
             CurrentWeek = DataChanger.GetWeek(cal, Today);
-            TomorrowWeek = DataChanger.GetWeek(cal, Tomorrow);
-            DayHours.AddHours(hours, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
+            DayHours.AddHours(hours, Today);
+            DayHours.ReadEventsFromFile(FirstPath);
+            DayHours.ReadEventsFromFile(SecondPath);
         }
 
         private void GoForward()
         {
             Today = DataChanger.ChangeTodayForward(Today);
-            Tomorrow = DataChanger.ChangeTomorrowForward(Tomorrow);
             Month = DataChanger.DateToStringLower(today, Format, myCulture);
-            TomorrowMonth = DataChanger.DateToStringLower(tomorrow, Format, myCulture);
             CurrentWeek = DataChanger.GetWeek(cal,Today);
-            TomorrowWeek = DataChanger.GetWeek(cal, Tomorrow);
-            DayHours.AddHours(hours, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(FirstPath, Today, Tomorrow);
-            DayHours.ReadEventsFromFile(SecondPath, Today, Tomorrow);
+            DayHours.AddHours(hours, Today);
+            DayHours.ReadEventsFromFile(FirstPath);
+            DayHours.ReadEventsFromFile(SecondPath);
         }
 
     }

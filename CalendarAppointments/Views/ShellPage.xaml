@@ -44,13 +44,13 @@
                 <Grid Grid.Column="0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button x:Name="SignIn" Content="Sign In" HorizontalAlignment="Right" Padding="5" Visibility="Visible" Command="{Binding CallGraphCommand, Mode=TwoWay}" Margin="5" FontFamily="Segoe Ui"/>
-                        <Button x:Name="SignOut" Content="Sign Out" HorizontalAlignment="Right" Visibility="{Binding Visibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SignOutCommand, Mode=TwoWay}"/>
+                        <Button x:Name="SignOut" Content="Sign Out" HorizontalAlignment="Right" Visibility="{Binding Visibility, Mode=OneWay}" Command="{Binding SignOutCommand, Mode=TwoWay}"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding UserName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12"/>
-                        <TextBlock Text="{Binding TokenExpires, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12"/>
+                        <TextBlock Text="{Binding UserName, Mode=OneWay}" FontSize="12"/>
+                        <TextBlock Text="{Binding TokenExpires, Mode=OneWay}" FontSize="12"/>
                     </StackPanel>
                 </Grid>
             </Grid>

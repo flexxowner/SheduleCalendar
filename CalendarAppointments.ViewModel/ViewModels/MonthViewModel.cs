@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using CalendarAppointments.Models.Models;
 using CalendarAppointments.ViewModel.Extensions;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -10,6 +9,8 @@ using Windows.UI.Xaml.Input;
 using CalendarAppointments.ViewModel.Service;
 using System.ComponentModel;
 using CalendarAppointments.ViewModel.Services;
+using Microsoft.Kiota.Abstractions;
+using Windows.UI.Xaml;
 
 namespace CalendarAppointments.ViewModel.ViewModels
 {
@@ -37,7 +38,7 @@ namespace CalendarAppointments.ViewModel.ViewModels
 
         public MonthViewModel()
         {
-            month = DataChanger.DateToStringUpper(today, Format, Culture);
+            month = DataChanger.DateToString(today, Format, Culture);
             months = new ObservableCollection<CalendarMonth>()
             {
                 new CalendarMonth() { Month = month, Year = today.Year}
