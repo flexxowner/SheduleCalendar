@@ -156,6 +156,7 @@ namespace CalendarAppointments.Controllers
         {
             try
             {
+                SignOutInfo();
                 IEnumerable<IAccount> accounts = await PublicClientApp.GetAccountsAsync().ConfigureAwait(false);
                 IAccount firstAccount = accounts.FirstOrDefault();
                 await PublicClientApp.RemoveAsync(firstAccount).ConfigureAwait(false);
@@ -185,6 +186,13 @@ namespace CalendarAppointments.Controllers
                 TokenExpires = $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}";
                 Visibility = Visibility.Visible;
             }
+        }
+
+        private void SignOutInfo()
+        {
+            UserName = "Please, authorize to see information";
+            TokenExpires = "";
+            Visibility = Visibility.Collapsed;
         }
 
     }

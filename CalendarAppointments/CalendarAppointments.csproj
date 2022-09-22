@@ -269,17 +269,17 @@
       <Project>{c2676221-0db8-4a53-a7d6-c6995308a3d1}</Project>
       <Name>CalendarAppointments.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CalendarAppointments.Models\Models.csproj">
+    <ProjectReference Include="..\CalendarAppointments.Models\CalendarAppointments.Models.csproj">
       <Project>{401F26A7-59AB-4F2F-857C-6900631BD4AD}</Project>
-      <Name>Models</Name>
+      <Name>CalendarAppointments.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CalendarAppointments.ViewModel\ViewModel.csproj">
+    <ProjectReference Include="..\CalendarAppointments.ViewModel\CalendarAppointments.ViewModel.csproj">
       <Project>{eb9dfb20-1d20-4d80-91b7-c21e5c175e90}</Project>
-      <Name>ViewModel</Name>
+      <Name>CalendarAppointments.ViewModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
+    <ProjectReference Include="..\Helpers\CalendarAppointments.Helpers.csproj">
       <Project>{73e5a2c0-a5fe-4ca1-8b57-73728945580c}</Project>
-      <Name>Helpers</Name>
+      <Name>CalendarAppointments.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

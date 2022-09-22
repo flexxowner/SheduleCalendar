@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarAppointments", "Cal
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalendarAppointments.Core", "CalendarAppointments.Core\CalendarAppointments.Core.csproj", "{C2676221-0DB8-4A53-A7D6-C6995308A3D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "CalendarAppointments.Models\Models.csproj", "{401F26A7-59AB-4F2F-857C-6900631BD4AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarAppointments.Models", "CalendarAppointments.Models\CalendarAppointments.Models.csproj", "{401F26A7-59AB-4F2F-857C-6900631BD4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "CalendarAppointments.ViewModel\ViewModel.csproj", "{EB9DFB20-1D20-4D80-91B7-C21E5C175E90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarAppointments.ViewModel", "CalendarAppointments.ViewModel\CalendarAppointments.ViewModel.csproj", "{EB9DFB20-1D20-4D80-91B7-C21E5C175E90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{73E5A2C0-A5FE-4CA1-8B57-73728945580C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarAppointments.Helpers", "Helpers\CalendarAppointments.Helpers.csproj", "{73E5A2C0-A5FE-4CA1-8B57-73728945580C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F7F0868-2711-48D2-884A-29F5BDE23E78}"
 	ProjectSection(SolutionItems) = preProject
