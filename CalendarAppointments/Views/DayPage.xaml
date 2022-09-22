@@ -1,0 +1,117 @@
+﻿<Page
+    x:Class="CalendarAppointments.Views.DayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:CalendarAppointments.Models.Models"
+    xmlns:vm ="using:CalendarAppointments.ViewModel.ViewModels"
+    Style="{StaticResource PageStyle}"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:DayViewModel/>
+    </Page.DataContext>
+    <Grid x:Name="ContentArea">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <Button Command="{x:Bind ViewModel.GoBackCommand}" Content="Prev"/>
+                        <Button Command="{x:Bind ViewModel.GoForwardCommand}" Content="Next"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Border BorderBrush="Gray" BorderThickness="1 1 0 1"></Border>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1">
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="{x:Bind ViewModel.Month, Mode=OneWay}" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto" TextAlignment="Center"/>
+                                <TextBlock Text="{x:Bind ViewModel.Today.Year, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto" TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1">
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="week" FontFamily="Cambria" FontSize="20" Height="Auto" Width="Auto"/>
+                                <TextBlock Text="{x:Bind ViewModel.CurrentWeek, Mode=OneWay}" FontSize="18" Height="Auto" Width="Auto"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Border BorderBrush="Gray" BorderThickness="1 1 0 1"></Border>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{x:Bind ViewModel.Today.DayOfWeek, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="Auto"/>
+                        <TextBlock Text="{x:Bind ViewModel.Today.Day, Mode=OneWay}" FontFamily="Cambria" FontSize="25" Height="Auto" Width="Auto"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid>
+                    <ListView ItemsSource="{x:Bind ViewModel.DayHours}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="BorderBrush" Value="Gray"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:DayHour">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="{Binding HourString}"/>
+                                    </Grid>
+                                    <Grid Grid.Column ="1">
+                                        <ListView ItemsSource="{Binding Events, Mode=TwoWay}">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Event">
+                                                    <Border Background="Green">
+                                                        <StackPanel Orientation="Horizontal" Spacing="5">
+                                                            <TextBlock Text="{Binding StartTimeString}" FontSize="15"/>
+                                                            <TextBlock Text="{Binding Subject}" FontSize="15"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
